@@ -1,0 +1,2 @@
+# IntellectualPropertySY
+intellectual property right
