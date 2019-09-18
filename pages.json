@@ -1,0 +1,77 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"type": "none",
+							"fontSrc": "/static/iconfont.ttf",
+							"text": "\ue618"
+						}]
+					}
+				}
+			}
+		}, {
+			"path": "pages/query/query",
+			"style": {}
+		}, {
+			"path": "pages/declare/declare",
+			"style": {}
+		}, {
+			"path": "pages/deal/deal",
+			"style": {}
+		}, {
+			"path": "pages/service/service",
+			"style": {}
+		}, {
+			"path": "pages/common/article/list",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#12866a",
+		"backgroundColor": "#12866a"
+	},
+	"tabBar": {
+		"color": "#ffffff",
+		"selectedColor": "#00ffc1",
+		"borderStyle": "white",
+		"backgroundColor": "#12866a",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/icon/sy01.png",
+				"selectedIconPath": "static/icon/sy02.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/query/query",
+				"iconPath": "static/icon/cx01.png",
+				"selectedIconPath": "static/icon/cx02.png",
+				"text": "信息查询"
+			}, {
+				"pagePath": "pages/declare/declare",
+				"iconPath": "static/icon/sb01.png",
+				"selectedIconPath": "static/icon/sb02.png",
+				"text": "知产申报"
+			}, {
+				"pagePath": "pages/deal/deal",
+				"iconPath": "static/icon/jy01.png",
+				"selectedIconPath": "static/icon/jy02.png",
+				"text": "知产交易"
+			}, {
+				"pagePath": "pages/service/service",
+				"iconPath": "static/icon/px01.png",
+				"selectedIconPath": "static/icon/px02.png",
+				"text": "培训服务"
+			}
+		]
+	}
+
+}
