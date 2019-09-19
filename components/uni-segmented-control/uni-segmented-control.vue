@@ -1,6 +1,8 @@
 <template>
-	<view :class="{ text: styleType === 'text' }" :style="{ borderColor: styleType === 'text' ? '' : activeColor }" class="segmented-control">
-		<view v-for="(item, index) in values" :class="[{ text: styleType === 'text' }, { active: index === currentIndex }]" :key="index" :style="{
+	<view :class="{ text: styleType === 'text', left: textAlign == 'left' }" :style="{ borderColor: styleType === 'text' ? '' : activeColor }"
+	 class="segmented-control">
+		<view v-for="(item, index) in values" :class="[{ text: styleType === 'text' }, { active: index === currentIndex }]"
+		 :key="index" :style="{
         color:
           index === currentIndex
             ? styleType === 'text'
@@ -10,7 +12,8 @@
               ? '#000'
               : activeColor,
         backgroundColor: index === currentIndex && styleType === 'button' ? activeColor : ''
-      }" class="segmented-control-item" @click="_onClick(index)">
+      }"
+		 class="segmented-control-item" @click="_onClick(index)">
 			{{ item }}
 		</view>
 	</view>
@@ -37,6 +40,10 @@
 			styleType: {
 				type: String,
 				default: 'button'
+			},
+			textAlign: {
+				type: String,
+				default: 'center'
 			}
 		},
 		data() {
@@ -65,7 +72,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	@charset "UTF-8";
 
 	.segmented-control {
@@ -80,6 +87,11 @@
 		border: 1px solid;
 		border-radius: 10upx
 	}
+	
+	.segmented-control.left {
+		justify-content: flex-start;
+		margin: 0;
+	}
 
 	.segmented-control.text {
 		border: 0;
@@ -93,6 +105,15 @@
 		box-sizing: border-box;
 		border-left: 1px solid
 	}
+	
+	.segmented-control.left .segmented-control-item {
+		flex: none;
+		padding: 0 $space-size-large;
+	}
+	
+	.segmented-control.left .segmented-control-item:not(:first-child) {
+		margin-left: $space-size-large;
+	}
 
 	.segmented-control-item.active {
 		color: #fff
@@ -104,7 +125,9 @@
 	}
 
 	.segmented-control-item.text.active {
-		border-bottom-style: solid
+		border-bottom-style: solid;
+		border-bottom-widht: 2px;
+		font-weight: bold;
 	}
 
 	.segmented-control-item:first-child {

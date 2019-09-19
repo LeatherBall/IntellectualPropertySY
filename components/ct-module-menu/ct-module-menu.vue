@@ -98,7 +98,12 @@
 	}
 
 	.swiper {
+		/* #ifdef APP-PLUS */
 		height: 380upx;
+		/* #endif */
+		/* #ifdef H5 */
+		height: 420upx;
+		/* #endif */
 	}
 
 	.image {

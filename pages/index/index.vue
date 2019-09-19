@@ -2,17 +2,19 @@
 	<view class="page">
 		<view class="home-banner">
 			<uni-swiper-dot :info="hannerList" :current="homeBarCurrent" :dotsStyles="homeBardotsStyles" mode="long" field="content">
-				<swiper :autoplay="true" class="swiper-box" @change="homeBarChange">
+				<swiper :autoplay="true" :circular="true" class="swiper-box" @change="homeBarChange">
 					<swiper-item class="wrapper" v-for="(banner, index) in hannerList" :key="index">
 						<image :src="banner.img" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
 		</view>
+
 		<view class="main-wrapper">
 			<view class="home-grid">
 				<ct-module-menu :menus="gridList "></ct-module-menu>
 			</view>
+
 			<view class="uni-swiper-msg">
 				<view class="uni-swiper-msg-text">
 					<text>通知公告</text>
@@ -25,31 +27,29 @@
 					</swiper-item>
 				</swiper>
 			</view>
+
 			<view class="uni-padding-wrap uni-common-mt">
-				<uni-segmented-control :current="tb1Current" :values="bars1" style-type="text" active-color="#12866a" @clickItem="clickTB1Item" />
+				<uni-segmented-control :current="tb1Current" :values="bars1" style-type="text" active-color="#12866a" @clickItem="clickTB1Item"
+				 text-align="left" />
 			</view>
 			<view class="content home-bars">
 				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
 					<view class="box vertical" v-for="(newsitem, indexitem) in tabBars1Data" :key="newsitem.id">
-						<view class="time">
-							<text class="day">{{newsitem.day}}</text>
-							<text class="year">{{newsitem.year}}</text>
-						</view>
-						<view class="text">
-							<view class="title"><text>{{newsitem.title}}</text></view>
-							<view class="detail">{{newsitem.content}}</view>
-						</view>
-						<text class="iconfont tip">&#xe75b;</text>
+						<view class="title"><text>{{newsitem.title}}</text></view>
+						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.time}}</text></view>
+						<uni-icon type="arrowright tip" color="#999999" size="20"></uni-icon>
 					</view>
 					<view class="loading-more">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
 			</view>
+
 			<view class="line-h"></view>
-			<!-- <ct-home-bars :tabBars="tabBars1"></ct-home-bars> -->
+
 			<view class="uni-padding-wrap uni-common-mt">
-				<uni-segmented-control :current="tb2Current" :values="bars2" style-type="text" active-color="#12866a" @clickItem="clickTB2Item" />
+				<uni-segmented-control :current="tb2Current" :values="bars2" style-type="text" active-color="#12866a" @clickItem="clickTB2Item"
+				 text-align="left" />
 			</view>
 			<view class="content home-bars">
 				<view v-for="(tab, index) in bars2" v-show="tb2Current === index" :key="index">
@@ -62,15 +62,16 @@
 							<view class="title"><text>{{newsitem.title}}</text></view>
 							<view class="detail">{{newsitem.content}}</view>
 						</view>
-						<text class="iconfont tip">&#xe75b;</text>
+						<uni-icon type="arrowright tip" color="#999999" size="20"></uni-icon>
 					</view>
 					<view class="loading-more">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
 			</view>
-			<!-- <ct-home-bars :tabBars="tabBars2"></ct-home-bars> -->
+
 			<view class="line-h"></view>
+
 			<view class="plate">
 				<view class="item" v-for="(plate, index) in plateList" :key="index">
 					<image :src="plate.img" class="image"></image>
@@ -80,6 +81,11 @@
 				</view>
 			</view>
 		</view>
+		<!-- #ifdef APP-PLUS -->
+		<view>
+			<yomol-upgrade :type="upgradeType" :url="upgradeUrl" :content="upgradeContent" ref="yomolUpgrade"></yomol-upgrade>
+		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -90,6 +96,13 @@
 	import ctHomeBars from '@/components/ct-home-bars/ct-home-bars.vue'
 	import uniSwiperDot from "@/components/uni-swiper-dot/uni-swiper-dot.vue"
 	import uniSegmentedControl from '@/components/uni-segmented-control/uni-segmented-control.vue'
+	import yomolUpgrade from '@/components/app-version-detection/yomol-upgrade/yomol-upgrade.vue'
+	import {
+		Context
+	} from '../../common/context.js';
+	import {
+		checkAppVersion
+	} from '../../common/util.js';
 
 	export default {
 		components: {
@@ -98,7 +111,8 @@
 			ctModuleMenu,
 			ctHomeBars,
 			uniSwiperDot,
-			uniSegmentedControl
+			uniSegmentedControl,
+			yomolUpgrade
 		},
 		data() {
 			return {
@@ -196,7 +210,7 @@
 				}],
 				tb1Current: 0,
 				bars1: ['新闻动态'],
-				tabBars1Data:[{
+				tabBars1Data: [{
 					id: Math.random(),
 					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
 					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
@@ -262,16 +276,32 @@
 						name: '在线地理杂志申请',
 						page: ''
 					}
-				]
+				],
+				upgradeType: '',
+				upgradeContent: '',
+				upgradeUrl: ''
 			}
 		},
-		onLoad() {},
+		onLoad() {
+			// #ifdef APP-PLUS
+			checkAppVersion(false, (res) => {
+				this.upgradeType = res.upgradeType;
+				this.upgradeContent = res.upgradeContent;
+				this.upgradeUrl = res.upgradeUrl;
+				this.$refs.yomolUpgrade.show();
+			}, (error) => {
+				console.error(error);
+			});
+			// #endif
+		},
 		methods: {
-			gridInfo(e) {
-
-			},
 			homeBarChange(e) {
 				this.homeBarCurrent = e.detail.current;
+			},
+			clickTB1Item(index) {
+				if (this.tb1Current !== index) {
+					this.tb1Current = index;
+				}
 			},
 			clickTB2Item(index) {
 				if (this.tb2Current !== index) {
@@ -287,6 +317,13 @@
 <style lang="scss">
 	.page {
 		background: $theme-color-b;
+		padding-bottom: $space-size-normal;
+		box-sizing: border-box;
+	}
+
+	.better-scroll-wrapper {
+		height: calc(100% - 96px);
+		overflow: hidden;
 	}
 
 	.home-search {
@@ -324,10 +361,12 @@
 	}
 
 	.main-wrapper {
-		margin: $space-size-normal;
+		margin-left: $space-size-normal;
+		margin-right: $space-size-normal;
 		margin-top: -10px;
+		margin-bottom: 0;
 		background: $bg-color-white;
-		border-radius: $radius-size-normal $radius-size-normal 0 0;
+		border-radius: $radius-size-small;
 		position: relative;
 		z-index: 3;
 	}
@@ -377,6 +416,7 @@
 		overflow: hidden;
 		padding: $space-size-large;
 		box-sizing: border-box;
+		padding-bottom: 0;
 	}
 
 	.plate .item {
@@ -415,6 +455,8 @@
 	.uni-common-mt {
 		margin-top: $space-size-normal;
 		border-bottom: 0.5px solid #D9D9D9;
+		width: 100%;
+		box-sizing: border-box;
 	}
 
 	.home-bars .box {
@@ -422,7 +464,7 @@
 		padding: $space-size-large 0;
 		margin: 0 $space-size-large;
 		box-sizing: border-box;
-		width: 720upx;
+		width: calc(100% - 30upx);
 		border-bottom: 0.5px dashed #D9D9D9;
 	}
 
@@ -445,7 +487,7 @@
 	}
 
 	.home-bars .box.horizontal .title {
-		width: 520upx;
+		width: 86%;
 		font-size: $font-size-normal;
 		color: $font-color-base;
 		overflow: hidden;
@@ -455,7 +497,7 @@
 
 	.home-bars .box.horizontal .text {
 		overflow: hidden;
-		width: 590upx;
+		width: 86%;
 	}
 
 	.home-bars .box.horizontal .time {
@@ -483,7 +525,7 @@
 	}
 
 	.home-bars .box.horizontal .time .day {
-		font-size: $font-size-normal;
+		font-size: $font-size-large;
 		line-height: 50upx;
 		font-weight: bold;
 	}
@@ -494,7 +536,7 @@
 	}
 
 	.home-bars .box.horizontal .text .detail {
-		width: 520upx;
+		width: 86%;
 		margin-top: $space-size-small;
 		font-size: $font-size-small;
 		color: $font-color-grey;
@@ -522,6 +564,27 @@
 
 	.home-bars .loading-more-text {
 		font-size: $font-size-normal;
+		color: $font-color-grey;
+	}
+
+	.home-bars .vertical .title {
+		width: 86%;
+		font-size: $font-size-normal;
+		color: $font-color-base;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.home-bars .vertical .time .clock {
+		display: inline-block;
+		font-size: $font-size-large;
+		color: $font-color-orange;
+		margin-right: $space-size-normal;
+	}
+
+	.home-bars .vertical .time .text {
+		font-size: $font-size-small;
 		color: $font-color-grey;
 	}
 </style>
