@@ -16,20 +16,29 @@
 			}
 		}, {
 			"path": "pages/query/query",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "信息查询"
+			}
 		}, {
 			"path": "pages/declare/declare",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "知产申报"
+			}
 		}, {
 			"path": "pages/deal/deal",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "知产交易"
+			}
 		}, {
 			"path": "pages/service/service",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "培训服务"
+			}
 		}, {
 			"path": "pages/common/article/list",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": true
 			}
 		}
 	],
@@ -40,35 +49,35 @@
 		"backgroundColor": "#12866a"
 	},
 	"tabBar": {
-		"color": "#ffffff",
-		"selectedColor": "#00ffc1",
-		"borderStyle": "white",
-		"backgroundColor": "#12866a",
+		"color": "#7A7E83",
+		"selectedColor": "#12866a",
+		"borderStyle": "black",
+		"backgroundColor": "#F8F8F8",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/icon/sy01.png",
-				"selectedIconPath": "static/icon/sy02.png",
+				"iconPath": "static/tabBar/sy01.png",
+				"selectedIconPath": "static/tabBar/sy02.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/query/query",
-				"iconPath": "static/icon/cx01.png",
-				"selectedIconPath": "static/icon/cx02.png",
+				"iconPath": "static/tabBar/cx01.png",
+				"selectedIconPath": "static/tabBar/cx02.png",
 				"text": "信息查询"
 			}, {
 				"pagePath": "pages/declare/declare",
-				"iconPath": "static/icon/sb01.png",
-				"selectedIconPath": "static/icon/sb02.png",
+				"iconPath": "static/tabBar/sb01.png",
+				"selectedIconPath": "static/tabBar/sb02.png",
 				"text": "知产申报"
 			}, {
 				"pagePath": "pages/deal/deal",
-				"iconPath": "static/icon/jy01.png",
-				"selectedIconPath": "static/icon/jy02.png",
+				"iconPath": "static/tabBar/jy01.png",
+				"selectedIconPath": "static/tabBar/jy02.png",
 				"text": "知产交易"
 			}, {
 				"pagePath": "pages/service/service",
-				"iconPath": "static/icon/px01.png",
-				"selectedIconPath": "static/icon/px02.png",
+				"iconPath": "static/tabBar/px01.png",
+				"selectedIconPath": "static/tabBar/px02.png",
 				"text": "培训服务"
 			}
 		]
