@@ -11,7 +11,7 @@
 		</view>
 		<view class="main-wrapper">
 			<view class="home-grid">
-				<ct-module-menu :menus="gridList"></ct-module-menu>
+				<ct-module-menu :menus="gridList "></ct-module-menu>
 			</view>
 			<view class="uni-swiper-msg">
 				<view class="uni-swiper-msg-text">
