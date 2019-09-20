@@ -67,14 +67,16 @@
 <style>
 	/*每个页面公共css */
 	@import './common/uni.css';
+	@import './common/base.css';
 
 	@font-face {
 		font-family: 'iconfont';
-		src: url('https://at.alicdn.com/t/font_1382986_rt6x2ynbipm.ttf') format('truetype');
+		src: url('static/iconfont.ttf') format('truetype');
 	}
 
 	.iconfont {
 		font-family: iconfont;
+		display: inline-block;
 	}
 
 	.uni-tabbar__item.cur .uni-tabbar__icon {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import uniIcon from './components/uni-icon/uni-icon.vue'
+import uniIcons from './components/uni-icon/uni-icons.vue'
 
 
 Vue.config.productionTip = false
@@ -9,7 +9,7 @@ Vue.prototype.$formatRes = function(res) {
 	return JSON.parse(res.data.substring(1, res.data.length - 1))
 }
 
-Vue.component('uni-icon', uniIcon);
+Vue.component('uni-icons', uniIcons);
 
 App.mpType = 'app'
 

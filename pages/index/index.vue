@@ -37,7 +37,7 @@
 					<view class="box vertical" v-for="(newsitem, indexitem) in tabBars1Data" :key="newsitem.id">
 						<view class="title"><text>{{newsitem.title}}</text></view>
 						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.time}}</text></view>
-						<uni-icon type="arrowright tip" color="#999999" size="20"></uni-icon>
+						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
 					<view class="loading-more">
 						<text class="loading-more-text">更多</text>
@@ -62,7 +62,7 @@
 							<view class="title"><text>{{newsitem.title}}</text></view>
 							<view class="detail">{{newsitem.content}}</view>
 						</view>
-						<uni-icon type="arrowright tip" color="#999999" size="20"></uni-icon>
+						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
 					<view class="loading-more">
 						<text class="loading-more-text">更多</text>

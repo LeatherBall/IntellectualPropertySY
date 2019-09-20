@@ -9,7 +9,7 @@
 						"buttons": [{
 							"type": "none",
 							"fontSrc": "/static/iconfont.ttf",
-							"text": "\ue618"
+							"text": "\ue60d"
 						}]
 					}
 				}
@@ -39,6 +39,16 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/common/article/detail",
+			"style": {
+			    "navigationBarTitleText": "文章详情",
+			    "app-plus": {
+			        "titleNView": {
+			            "type": "transparent"
+			        }
+			    }
 			}
 		}
 	],
