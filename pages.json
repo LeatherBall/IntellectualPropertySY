@@ -6,10 +6,12 @@
 				"navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
 				"app-plus": {
 					"titleNView": {
+						// "type": "transparent",		
 						"buttons": [{
 							"type": "none",
-							"fontSrc": "/static/iconfont.ttf",
-							"text": "\ue60d"
+							"text": "登录",
+							"fontSize": "15",
+							"fontWeight": "normal"
 						}]
 					}
 				}
@@ -43,12 +45,17 @@
 		}, {
 			"path": "pages/common/article/detail",
 			"style": {
-			    "navigationBarTitleText": "文章详情",
-			    "app-plus": {
-			        "titleNView": {
-			            "type": "transparent"
-			        }
-			    }
+				"navigationBarTitleText": "文章详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
+		}, {
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF"
 			}
 		}
 	],

@@ -294,6 +294,24 @@
 			});
 			// #endif
 		},
+		onNavigationBarButtonTap(arg) {
+			if (arg.text == '登录') {
+				uni.navigateTo({
+					url: '../login/login'
+				})
+			}
+			// #ifdef APP-PLUS
+			const webView = this.$mp.page.$getAppWebview();
+			webView.setTitleNViewButtonStyle(arg.index, {
+				text: 'hello',
+			});
+			// #endif
+			
+			// #ifdef H5
+			const dom = document.querySelectorAll(".uni-btn-icon")[1];
+			dom.innerText = "hello";
+			// #endif
+		},
 		methods: {
 			homeBarChange(e) {
 				this.homeBarCurrent = e.detail.current;

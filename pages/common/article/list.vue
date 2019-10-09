@@ -83,6 +83,7 @@
 		/* #ifdef APP-PLUS */
 		border-bottom: $border-style-basic;
 		/* #endif */
+		
 		/* #ifdef H5 MP-WEIXIN */
 		border-bottom: $border-style-basic-h5;
 		/* #endif */
