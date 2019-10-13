@@ -78,6 +78,7 @@ $uni-font-size-paragraph:30upx;
 /* ---------------------------ChinaCT Mobile------------------------- */
 /* 文字基本颜色 */
 $font-color-base:#333333;//基本色
+$font-color-sec:#666; //次要色
 $font-color-inverse:#ffffff;//反色
 $font-color-grey:#999999;//辅助灰色，如加载更多的提示信息
 $font-color-orange:#F76260;//橘红色
@@ -94,6 +95,7 @@ $font-size-huge:36upx;
 $space-size-small:5upx;
 $space-size-normal:10upx;
 $space-size-large:15upx;
+$space-size-huge:20upx;
 
 /* border radius */
 $radius-size-small:5upx;

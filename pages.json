@@ -34,7 +34,16 @@
 		}, {
 			"path": "pages/service/service",
 			"style": {
-				"navigationBarTitleText": "培训服务"
+				"navigationBarTitleText": "培训服务",
+				"app-plus": {
+					"titleNView": {
+						"searchInput": {
+							"backgroundColor": "#fff",
+							"borderRadius": "600px",
+							"placeholder": "请输入关键字"
+						}
+					}
+				}
 			}
 		}, {
 			"path": "pages/common/article/list",
@@ -56,6 +65,16 @@
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		}, {
+			"path": "pages/service/detail",
+			"style": {
+				"navigationBarTitleText": "在线培训详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
 			}
 		}
 	],
