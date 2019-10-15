@@ -43,7 +43,35 @@
 			}
 		},
 		onShow() {
-			this.products = new Array(20);
+			uni.request({
+				method: 'GET',
+				url: this.$servicePath + 'online/mobile/online.xhtml',
+				data: {
+				},
+				success: (res) => {
+					if (res.data.resultFlag) {
+						
+						this.products = new Array(20);
+							
+					} else {
+						uni.showToast({
+							icon: 'none',
+							position: 'bottom',
+							title: res.data.resultMsg
+						});
+					}
+				},
+				fail: (res) => {
+					uni.showToast({
+						icon: 'none',
+						position: 'center',
+						title: '登录失败，请稍后再试'
+					})
+				},
+				complete: () => {
+					this.isRotate = false;
+				}
+			})
 		}
 	}
 </script>
