@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import uniIcons from './components/uni-icon/uni-icons.vue'
+import uniIcons from './components/uni-icons/uni-icons.vue'
 import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
 
 

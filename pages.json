@@ -36,7 +36,14 @@
 			"style": {
 				"navigationBarTitleText": "培训服务"
 			}
-		}, {
+		},
+		{
+			"path": "pages/service/detail",
+			"style": {
+				"navigationBarTitleText": "在线培训详情"
+			}
+		},
+		{
 			"path": "pages/common/article/list",
 			"style": {
 				"navigationBarTitleText": "",
@@ -80,11 +87,11 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-			"pagePath": "pages/index/index",
-			"iconPath": "static/tabBar/sy01.png",
-			"selectedIconPath": "static/tabBar/sy02.png",
-			"text": "首页"
-		},
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabBar/sy01.png",
+				"selectedIconPath": "static/tabBar/sy02.png",
+				"text": "首页"
+			},
 			{
 				"pagePath": "pages/query/query",
 				"iconPath": "static/tabBar/cx01.png",

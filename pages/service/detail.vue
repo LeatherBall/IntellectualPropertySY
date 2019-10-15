@@ -26,9 +26,9 @@
 				<rich-text :nodes="htmlNodes"></rich-text>
 			</view>
 		</view>
-		<view class="button-bottom">
+		<!-- <view class="button-bottom">
 			<button type="primary">在线学习</button>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -62,7 +62,7 @@
 
 <style lang="scss">
 	page {
-		background: $bg-color-under;
+		background: $bg-color-white;
 	}
 
 	.banner {
@@ -118,7 +118,7 @@
 
 		.content {
 			color: $font-color-base;
-			padding-bottom: 78px;
+			// padding-bottom: 78px;
 		}
 	}
 
