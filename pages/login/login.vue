@@ -25,7 +25,9 @@
 <script>
 	import wInput from '../../components/watch-login/watch-input.vue' //input
 	import wButton from '../../components/watch-login/watch-button.vue' //button
-	import context from '../../common/context';
+	import {
+		UserBase
+	} from '../../common/userbase.js';
 	import {
 		checkRegExp,
 		DateUtils
@@ -70,6 +72,41 @@
 					this.isRotate = false;
 					return;
 				}
+				uni.request({
+					method: 'GET',
+					url: this.$servicePath + 'user/mobile/userLogin.xhtml',
+					data: {
+						userLoginName: this.username,
+						userPassword: this.password
+					},
+					success: (res) => {
+						if (res.data.resultFlag) {
+							UserBase.setUser(res.data.object, this.password);
+							uni.navigateBack();
+							uni.showToast({
+								icon: 'none',
+								position: 'bottom',
+								title: '欢迎回来，' + res.data.object.userObj
+							});
+						} else {
+							uni.showToast({
+								icon: 'none',
+								position: 'bottom',
+								title: res.data.resultMsg
+							});
+						}
+					},
+					fail: (res) => {
+						uni.showToast({
+							icon: 'none',
+							position: 'center',
+							title: '登录失败，请稍后再试'
+						})
+					},
+					complete: () => {
+						this.isRotate = false;
+					}
+				})
 			}
 		}
 	}

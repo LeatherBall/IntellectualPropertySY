@@ -68,6 +68,7 @@
 	/*每个页面公共css */
 	@import './common/uni.css';
 	@import './common/base.css';
+	@import './common/colorui.css';
 
 	@font-face {
 		font-family: 'iconfont';
@@ -77,13 +78,5 @@
 	.iconfont {
 		font-family: iconfont;
 		display: inline-block;
-	}
-
-	.uni-tabbar__item.cur .uni-tabbar__icon {
-		width: 100upx;
-	}
-
-	.uni-tabbar__item.cur .uni-tabbar__label {
-		display: none;
 	}
 </style>

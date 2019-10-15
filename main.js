@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import App from './App'
-import uniIcons from './components/uni-icons/uni-icons.vue'
+import uniIcons from './components/uni-icon/uni-icons.vue'
+import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
 
 
 Vue.config.productionTip = false
 
-Vue.prototype.$formatRes = function(res) {
-	return JSON.parse(res.data.substring(1, res.data.length - 1))
-}
+Vue.prototype.$servicePath = 'http://192.168.141.106:8180/TradeArea/';
 
 Vue.component('uni-icons', uniIcons);
+Vue.component('uni-load-more', uniLoadMore)
 
 App.mpType = 'app'
 

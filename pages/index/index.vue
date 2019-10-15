@@ -98,8 +98,8 @@
 	import uniSegmentedControl from '@/components/uni-segmented-control/uni-segmented-control.vue'
 	import yomolUpgrade from '@/components/app-version-detection/yomol-upgrade/yomol-upgrade.vue'
 	import {
-		Context
-	} from '../../common/context.js';
+		UserBase
+	} from '../../common/userbase.js';
 	import {
 		checkAppVersion
 	} from '../../common/util.js';
@@ -116,6 +116,7 @@
 		},
 		data() {
 			return {
+				isLogin: false,
 				homeBarCurrent: 0,
 				homeBardotsStyles: {
 					backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -294,23 +295,14 @@
 			});
 			// #endif
 		},
-		onNavigationBarButtonTap(arg) {
-			if (arg.text == '登录') {
-				uni.navigateTo({
-					url: '../login/login'
-				})
-			}
-			// #ifdef APP-PLUS
-			const webView = this.$mp.page.$getAppWebview();
-			webView.setTitleNViewButtonStyle(arg.index, {
-				text: 'hello',
-			});
-			// #endif
-			
-			// #ifdef H5
-			const dom = document.querySelectorAll(".uni-btn-icon")[1];
-			dom.innerText = "hello";
-			// #endif
+		onShow() {
+			this.checkUserInfo();
+		},
+		onNavigationBarButtonTap() {
+			const page = this.isLogin ? '../mine/userinfo' : '../login/login';
+			uni.navigateTo({
+				url: page
+			})
 		},
 		methods: {
 			homeBarChange(e) {
@@ -324,6 +316,30 @@
 			clickTB2Item(index) {
 				if (this.tb2Current !== index) {
 					this.tb2Current = index
+				}
+			},
+			checkUserInfo() {
+				if (!this.isLogin) {
+					UserBase.getUser(this.$servicePath, user => {
+						if (user) {
+							let username = user.userName;
+							if (username.length > 3) {
+								username = username.substring(0, 3) + '..';
+							}
+							// #ifdef APP-PLUS
+							const webView = this.$mp.page.$getAppWebview();
+							webView.setTitleNViewButtonStyle(arg.index, {
+								text: username,
+							});
+							// #endif
+
+							// #ifdef H5
+							const dom = document.querySelectorAll(".uni-btn-icon")[1];
+							dom.innerText = username;
+							// #endif
+							this.isLogin = true;
+						}
+					});
 				}
 			}
 		},

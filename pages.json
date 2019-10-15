@@ -6,11 +6,11 @@
 				"navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
 				"app-plus": {
 					"titleNView": {
-						// "type": "transparent",		
+						// "type": "transparent",
 						"buttons": [{
 							"type": "none",
 							"text": "登录",
-							"fontSize": "15",
+							"fontSize": "14",
 							"fontWeight": "normal"
 						}]
 					}
@@ -34,16 +34,7 @@
 		}, {
 			"path": "pages/service/service",
 			"style": {
-				"navigationBarTitleText": "培训服务",
-				"app-plus": {
-					"titleNView": {
-						"searchInput": {
-							"backgroundColor": "#fff",
-							"borderRadius": "600px",
-							"placeholder": "请输入关键字"
-						}
-					}
-				}
+				"navigationBarTitleText": "培训服务"
 			}
 		}, {
 			"path": "pages/common/article/list",
@@ -64,17 +55,16 @@
 		}, {
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarBackgroundColor": "#FFFFFF"
-			}
-		}, {
-			"path": "pages/service/detail",
-			"style": {
-				"navigationBarTitleText": "在线培训详情",
 				"app-plus": {
 					"titleNView": {
 						"type": "transparent"
 					}
 				}
+			}
+		}, {
+			"path": "pages/mine/userinfo",
+			"style": {
+				"navigationBarTitleText": "账户信息"
 			}
 		}
 	],
@@ -90,11 +80,11 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/tabBar/sy01.png",
-				"selectedIconPath": "static/tabBar/sy02.png",
-				"text": "首页"
-			},
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tabBar/sy01.png",
+			"selectedIconPath": "static/tabBar/sy02.png",
+			"text": "首页"
+		},
 			{
 				"pagePath": "pages/query/query",
 				"iconPath": "static/tabBar/cx01.png",

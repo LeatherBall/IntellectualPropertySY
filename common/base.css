@@ -36,3 +36,8 @@ image {
 	-webkit-line-clamp: 3;
 	line-clamp: 3;
 }
+
+.padding-button {
+	width: 100%;
+	padding: 30upx;
+}
