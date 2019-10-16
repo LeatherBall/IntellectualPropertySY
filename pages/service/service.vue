@@ -8,7 +8,7 @@
 						企业忙转型，专利来“看家”
 					</view>
 					<view class="factory ellipsis">
-						知识产权培训asdfasdfasdf
+						知识产权培训
 					</view>
 				</view>
 			</view>
