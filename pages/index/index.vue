@@ -319,28 +319,24 @@
 				}
 			},
 			checkUserInfo() {
-				if (!this.isLogin) {
-					UserBase.getUser(this.$servicePath, user => {
-						if (user) {
-							let username = user.userName;
-							if (username.length > 3) {
-								username = username.substring(0, 3) + '..';
-							}
-							// #ifdef APP-PLUS
-							const webView = this.$mp.page.$getAppWebview();
-							webView.setTitleNViewButtonStyle(arg.index, {
-								text: username,
-							});
-							// #endif
-
-							// #ifdef H5
-							const dom = document.querySelectorAll(".uni-btn-icon")[1];
-							dom.innerText = username;
-							// #endif
-							this.isLogin = true;
-						}
+				UserBase.getUser(this.$servicePath, user => {
+					let showname = !!user ? user.userName : '登录';
+					if (showname.length > 3) {
+						showname = showname.substring(0, 3) + '..';
+					}
+					// #ifdef APP-PLUS
+					const webView = this.$mp.page.$getAppWebview();
+					webView.setTitleNViewButtonStyle(arg.index, {
+						text: showname,
 					});
-				}
+					// #endif
+
+					// #ifdef H5
+					const dom = document.querySelectorAll(".uni-btn-icon")[1];
+					dom.innerText = showname;
+					// #endif
+					this.isLogin = !!user;
+				});
 			}
 		},
 		computed: {

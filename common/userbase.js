@@ -52,6 +52,9 @@ const UserBase = {
 			};
 			USEROBJ = newUser;
 			cacheUserToStorage(newUser);
+		} else {
+			USEROBJ = null;
+			clearUserFromStorage();
 		}
 	},
 
@@ -86,9 +89,11 @@ const UserBase = {
 				},
 				fail: (res) => {
 					clearUserFromStorage();
-					rcallback(null);
+					callback(null);
 				}
 			})
+		} else {
+			callback(null);
 		}
 	}
 }

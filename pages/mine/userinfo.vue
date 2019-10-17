@@ -89,7 +89,7 @@
 			</view>
 		</view>
 		<view class="padding-button">
-			<button type="warn" class="">退出登录</button>
+			<button type="warn" class="" @click="logout">退出登录</button>
 		</view>
 	</view>
 </template>
@@ -117,6 +117,21 @@
 					this.useraccount = '企业账号';
 				}
 			})
+		},
+		methods: {
+			logout() {
+				uni.showModal({
+					title: '',
+					content: '确认退出账号吗？',
+					confirmText: '确认退出',
+					success: (res) => {
+						if (res.confirm) {
+							UserBase.setUser(null);
+							uni.navigateBack();
+						}
+					}
+				})
+			}
 		}
 	}
 </script>
