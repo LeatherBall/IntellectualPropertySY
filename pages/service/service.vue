@@ -1,26 +1,13 @@
 <template>
 	<view>
 		<view class="pro-list">
-			<view class="sub-list">
-				<view class="pro" v-for="(item, index) in products" :key="index" v-if="index%2==0" @click="showInfo" :data-logicid="item.logicId">
-					<image :src="item.fileUrl" mode="widthFix" class="image"></image>
-					<view class="name ellipsis-two">
-						{{item.trainName}}
-					</view>
-					<view class="factory ellipsis">
-						{{item.trainType}}
-					</view>
+			<view class="pro" v-for="(item, index) in products" :key="index" @click="showInfo" :data-logicid="item.logicId">
+				<image :src="item.fileUrl" mode="widthFix" class="image"></image>
+				<view class="name ellipsis-two">
+					{{item.trainName}}
 				</view>
-			</view>
-			<view class="sub-list">
-				<view class="pro" v-for="(item, index) in products" :key="index" v-if="index%2==1" @click="showInfo" :data-logicid="item.logicId">
-					<image :src="item.fileUrl" mode="widthFix" class="image"></image>
-					<view class="name ellipsis-two">
-						{{item.trainName}}
-					</view>
-					<view class="factory ellipsis">
-						{{item.trainType}}
-					</view>
+				<view class="factory ellipsis">
+					{{item.trainType}}
 				</view>
 			</view>
 		</view>
@@ -101,7 +88,7 @@
 			showInfo(e) {
 				var logicId = e.currentTarget.dataset.logicid;
 				uni.navigateTo({
-					url: 'detail?logicId='+logicId
+					url: 'detail?logicId=' + logicId
 				})
 			}
 		}
@@ -114,39 +101,43 @@
 	}
 
 	.pro-list {
-		display: flex;
+		// display: flex;
 		margin: $space-size-huge;
+		overflow: hidden;
 
-		.sub-list {
-			flex-basis: 50%;
-
-			.pro {
-				background: $bg-color-white;
-				border-radius: $radius-size-normal;
-				overflow: hidden;
-				margin-bottom: $space-size-huge;
-
-				.image {
-					display: block;
-					width: 100%;
-					background-image: url("../../static/noPic.png");
-					background-size: 100%;
-					background-repeat: no-repeat;
-				}
-
-				.name {
-					font-size: $font-size-normal;
-					color: $font-color-base;
-					padding: $space-size-normal;
-					line-height: 1.5;
-				}
-
-				.factory {
-					padding: $space-size-normal;
-					font-size: $font-size-small;
-					color: $font-color-grey;
-				}
+		.pro {
+			width: calc(50% - 20rpx);
+			margin: 0 10rpx;
+			float: left;
+			background: $bg-color-white;
+			border-radius: $radius-size-normal;
+			overflow: hidden;
+			margin-bottom: $space-size-huge;
+			height: 606rpx;
+			.image {
+				display: block;
+				width: 100%;
+				height: 440rpx;
+				background-image: url("../../static/noPic.png");
+				background-size: 100%;
+				background-repeat: no-repeat;
 			}
+
+			.name {
+				font-size: $font-size-normal;
+				color: $font-color-base;
+				padding: $space-size-normal;
+				line-height: 1.5;
+				height: 104rpx;
+			}
+
+			.factory {
+				padding: $space-size-normal;
+				font-size: $font-size-small;
+				color: $font-color-grey;
+				height: 62rpx;
+			}
+
 		}
 
 		.sub-list:first-child {
