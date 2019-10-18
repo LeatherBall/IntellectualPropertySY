@@ -1,18 +1,8 @@
 <template>
 	<view>
-		<view class="article-item" v-for="(article, index) in list" :key="index" @click="viewDetails(article.logicId)">
-			<view class="wrapper">
-				<view class="title">
-					<view class="text ellipsis">{{article.title}}</view>
-				</view>
-				<view class="content">
-					<image :src="article.img" mode="aspectFill"></image>
-					<view class="desc">
-						<view class="text-content ellipsis-three">{{article.content}}</view>
-						<view class="time"><text class="iconfont clock">&#xe604;</text>{{article.time}}</view>
-					</view>
-				</view>
-			</view>
+		<view class="article">
+			<view class="title">文章标题</view>
+			<view class="time"><text class="iconfont clock">&#xe604;</text>2019-10-18</view>
 		</view>
 		<uni-load-more :status="status" />
 	</view>
@@ -20,7 +10,9 @@
 
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-
+	import {
+		getArticleList
+	} from '../../../common/util.js'
 	export default {
 		components: {
 			uniLoadMore
@@ -28,19 +20,22 @@
 		data() {
 			return {
 				status: 'more',
+				columnId: '',
+				pageIndex: 0,
+				pageSize: 20,
 				list: []
 			}
 		},
 		onLoad(param) {
-			if (param && param.pageTitle) {
-				uni.setNavigationBarTitle({
-					title: param.pageTitle
-				})
-			}
+			uni.setNavigationBarTitle({
+				title: param.pageTitle
+			})
+			this.columnId = param.columnId;
 			this.getList();
 		},
 		onPullDownRefresh() {
-			this.getList('refresh');
+			this.pageIndex = 0;
+			this.getList();
 		},
 		onReachBottom() {
 			if (this.status != 'noMore') {
@@ -50,6 +45,9 @@
 		methods: {
 			getList(type) {
 				this.status = 'loading';
+
+
+
 				setTimeout(() => {
 					if (type == 'refresh') {
 						this.list = [];
@@ -83,7 +81,7 @@
 		/* #ifdef APP-PLUS */
 		border-bottom: $border-style-basic;
 		/* #endif */
-		
+
 		/* #ifdef H5 MP-WEIXIN */
 		border-bottom: $border-style-basic-h5;
 		/* #endif */

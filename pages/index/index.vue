@@ -20,52 +20,75 @@
 					<text>通知公告</text>
 				</view>
 				<swiper vertical="true" autoplay="true" circular="true" interval="3000">
-					<swiper-item v-for="(item, index) in msgList" :key="index">
-						<navigator class="home-msg">
-							{{item.text}}
-						</navigator>
+					<swiper-item v-for="item in msgList" :key="item.logicId" @click="openUrl(item.ext6)">
+						<view class="home-msg">
+							{{item.title}}
+						</view>
 					</swiper-item>
 				</swiper>
 			</view>
 
+			<!-- 新闻动态 -->
 			<view class="uni-padding-wrap uni-common-mt">
 				<uni-segmented-control :current="tb1Current" :values="bars1" style-type="text" active-color="#12866a" @clickItem="clickTB1Item"
 				 text-align="left" />
 			</view>
-			<view class="content home-bars">
+			<view class="content home-bars" v-if="listState.newsLoad">
 				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
-					<view class="box vertical" v-for="(newsitem, indexitem) in tabBars1Data" :key="newsitem.id">
+					<view class="box vertical" v-for="newsitem in tabBars1Data" :key="newsitem.logicId" @click="openUrl(newsitem.ext6)">
 						<view class="title"><text>{{newsitem.title}}</text></view>
-						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.time}}</text></view>
+						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.createTimeStr}}</text></view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more">
+					<view class="loading-more" v-show="listState.newsCount > 3">
 						<text class="loading-more-text">更多</text>
+					</view>
+				</view>
+			</view>
+			<!-- 新闻动态站位骨架 -->
+			<view class="content home-bars stance-news" v-if="!listState.newsLoad">
+				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
+					<view class="stance vertical" v-for="index in 3" :key="index">
+						<view class="title"></view>
+						<view class="time"></view>
 					</view>
 				</view>
 			</view>
 
 			<view class="line-h"></view>
 
+			<!-- 专利、商标、版权转让 -->
 			<view class="uni-padding-wrap uni-common-mt">
 				<uni-segmented-control :current="tb2Current" :values="bars2" style-type="text" active-color="#12866a" @clickItem="clickTB2Item"
 				 text-align="left" />
 			</view>
-			<view class="content home-bars">
-				<view v-for="(tab, index) in bars2" v-show="tb2Current === index" :key="index">
-					<view class="box horizontal" v-for="(newsitem, indexitem) in tabBars2Data" :key="newsitem.id">
+			<view class="content home-bars" v-if="listState.patentLoad && listState.trademarkLoad && listState.copyrightLoad">
+				<view v-for="(tab, index) in bars2En" v-show="tb2Current === index" :key="index">
+					<view class="box horizontal" v-for="newsitem in tabBars2Data[tab]" :key="newsitem.logicId">
 						<view class="time">
 							<text class="day">{{newsitem.day}}</text>
 							<text class="year">{{newsitem.year}}</text>
 						</view>
 						<view class="text">
 							<view class="title"><text>{{newsitem.title}}</text></view>
-							<view class="detail">{{newsitem.content}}</view>
+							<view class="detail">
+								<u-parse :content="newsitem.content"></u-parse>
+							</view>
 						</view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more">
+					<view class="loading-more" v-show="listState[tab + 'Count'] > 3">
 						<text class="loading-more-text">更多</text>
+					</view>
+				</view>
+			</view>
+			<!-- 专利、商标、版权转让 站位骨架-->
+			<view class="content home-bars stance-news" v-if="!listState.patentLoad || !listState.trademarkLoad || !listState.copyrightLoad">
+				<view v-for="index in 3" class="stance horizontal" :key="index">
+					<view class="time"></view>
+					<view class="text">
+						<view class="title"></view>
+						<view class="detail"></view>
 					</view>
 				</view>
 			</view>
@@ -85,7 +108,6 @@
 		<view>
 			<yomol-upgrade :type="upgradeType" :url="upgradeUrl" :content="upgradeContent" ref="yomolUpgrade"></yomol-upgrade>
 		</view>
-		<!-- #endif -->
 	</view>
 </template>
 
@@ -97,11 +119,13 @@
 	import uniSwiperDot from "@/components/uni-swiper-dot/uni-swiper-dot.vue"
 	import uniSegmentedControl from '@/components/uni-segmented-control/uni-segmented-control.vue'
 	import yomolUpgrade from '@/components/app-version-detection/yomol-upgrade/yomol-upgrade.vue'
+	import uParse from '@/components/gaoyia-parse/parse.vue'
 	import {
 		UserBase
 	} from '../../common/userbase.js';
 	import {
-		checkAppVersion
+		checkAppVersion,
+		getArticleList
 	} from '../../common/util.js';
 
 	export default {
@@ -112,7 +136,8 @@
 			ctHomeBars,
 			uniSwiperDot,
 			uniSegmentedControl,
-			yomolUpgrade
+			yomolUpgrade,
+			uParse
 		},
 		data() {
 			return {
@@ -189,74 +214,17 @@
 						page: ''
 					}
 				],
-				msgList: [{
-						text: '交通运输部科学研究院联合百度地图最新发布了《2019年国庆节假期出行预测报告》'
-					},
-					{
-						text: '国务院新闻办公室9月3日举行新闻发布会，发表《中国的核安全》白皮书，这是中国发表的首部核安全白皮书'
-					},
-					{
-						text: '8月20日,中央纪委国家监委网站公布了新疆维吾尔自治区纪委监委通报的5起为被错告诬告党员干部澄清正名典型案例'
-					},
-					{
-						text: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育'
-					}
-				],
-				tabBars1: [{
-					id: 'xinwendongtai',
-					name: '新闻动态',
-					infoPage: '',
-					listPage: '../common/article/list?pageTitle=新闻动态',
-					place: 'vertical'
-				}],
+				msgList: [],
 				tb1Current: 0,
 				bars1: ['新闻动态'],
-				tabBars1Data: [{
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}, {
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}, {
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}],
+				tabBars1Data: [],
 				tb2Current: 0,
 				bars2: ['专利转让', '商标转让', '版权转让'],
-				tabBars2Data: [{
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}, {
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}, {
-					id: Math.random(),
-					title: '教育部9月3日公布2019年教书育人楷模名单。10位入选教师涵盖高教、职教、基教、幼教、特教等各级各类教育',
-					content: '习近平在贺电中说，值此朝鲜民主主义人民共和国成立71周年之际，我谨代表中国共产党、中国政府、中国人民，向委员长同志并通过你，向朝鲜劳动党、朝鲜政府、朝鲜人民致以热烈的祝贺和诚挚的祝愿。',
-					time: '2019-09-03',
-					year: '2019',
-					day: '09-03'
-				}],
+				bars2En: ['patent', 'trademark', 'copyright'],
+				bars2Flag: false,
+				tabBars2Data: {},
+				// 首页新闻动态、专利转让、商标转让、版权转让列表中的文章数量以及加载状态（数量超过3时显示更多）
+				listState: {},
 				plateList: [{
 						img: '../../static/zhuanlisq.jpg',
 						name: '在线专利申请',
@@ -283,6 +251,8 @@
 				upgradeUrl: ''
 			}
 		},
+		computed: {},
+		watch: {},
 		onLoad() {
 			// #ifdef APP-PLUS
 			checkAppVersion(false, (res) => {
@@ -294,6 +264,10 @@
 				console.error(error);
 			});
 			// #endif
+
+			this.getNotice();
+			this.getNews();
+			this.getTransferList();
 		},
 		onShow() {
 			this.checkUserInfo();
@@ -322,11 +296,11 @@
 				UserBase.getUser(this.$servicePath, user => {
 					let showname = !!user ? user.userName : '登录';
 					if (showname.length > 3) {
-						showname = showname.substring(0, 3) + '..';
+						showname = showname.substring(0, 2) + '..';
 					}
 					// #ifdef APP-PLUS
 					const webView = this.$mp.page.$getAppWebview();
-					webView.setTitleNViewButtonStyle(arg.index, {
+					webView.setTitleNViewButtonStyle(0, {
 						text: showname,
 					});
 					// #endif
@@ -337,10 +311,121 @@
 					// #endif
 					this.isLogin = !!user;
 				});
-			}
-		},
-		computed: {
+			},
+			// 获取通知公告
+			getNotice() {
+				getArticleList({
+					ip: this.$servicePath,
+					columnId: '155540151100315',
+					pageSize: 5
+				}, (res) => {
+					if (res.resultFlag) {
+						this.msgList = res.object.presidents.results;
+					}
+				})
+			},
+			// 获取新闻动态
+			getNews() {
+				getArticleList({
+					ip: this.$servicePath,
+					columnId: '155540151100326',
+					pageSize: 3
+				}, res => {
+					if (res.resultFlag) {
+						const list = res.object.presidents.results;
+						list.forEach(item => {
+							item.createTimeStr = item.createTimeStr ? item.createTimeStr.replace(/\//g, '-') : '- -';
+						})
+						this.tabBars1Data = list;
+						this.listState.newsCount = res.object.presidents.count;
+						this.listState.newsLoad = true;
+					}
+				})
+			},
+			// 获取专利、商标、版权转让列表
+			getTransferList() {
+				this.bars2En.forEach(itemBar => {
+					if (itemBar == 'patent') {
+						uni.request({
+							method: 'GET',
+							url: this.$servicePath + 'patent/mobile/patent.xhtml',
+							data: {
+								pageIndex: 0,
+								pageSize: 3
+							},
+							success: (res) => {
+								const list = res.data.object.presidents.results;
+								list.forEach(itemData => {
+									itemData.title = itemData.patentName;
+									const date = itemData.createTimeStr;
+									if (date) {
+										itemData.year = date.substring(0, 4);
+										itemData.day = date.substring(5, 10);
+									}
+								})
+								this.tabBars2Data[itemBar] = list;
+								this.listState.patentCount = res.data.object.presidents.count;
+								this.listState.patentLoad = true;
+							}
+						})
+					} else if (itemBar == 'trademark') {
+						uni.request({
+							method: 'GET',
+							url: this.$servicePath + 'trademark/mobile/trademark.xhtml',
+							data: {
+								pageIndex: 0,
+								pageSize: 3
+							},
+							success: (res) => {
+								const list = res.data.object.presidents.results;
+								list.forEach(itemData => {
+									itemData.title = itemData.trademarkName;
+									const date = itemData.createTimeStr;
+									if (date) {
+										itemData.year = date.substring(0, 4);
+										itemData.day = date.substring(5, 10);
+									}
+								})
+								this.tabBars2Data[itemBar] = list;
+								this.listState.trademarkCount = res.data.object.presidents.count;
+								this.listState.trademarkLoad = true;
+							}
+						})
+					} else {
+						uni.request({
+							method: 'GET',
+							url: this.$servicePath + 'copyright/mobile/copyright.xhtml',
+							data: {
+								pageIndex: 0,
+								pageSize: 3
+							},
+							success: (res) => {
+								const list = res.data.object.presidents.results;
+								list.forEach(itemData => {
+									itemData.title = itemData.copyrightname;
+									const date = itemData.createTimeStr;
+									if (date) {
+										itemData.year = date.substring(0, 4);
+										itemData.day = date.substring(5, 10);
+									}
+								})
+								this.tabBars2Data[itemBar] = list;
+								this.listState.copyrightCount = res.data.object.presidents.count;
+								this.listState.copyrightLoad = true;
+							}
+						})
+					}
+				})
+			},
+			openUrl(url) {
+				// #ifdef APP-PLUS
+				plus.runtime.openWeb(url);
+				// #endif
 
+				// #ifdef H5
+				window.open(url);
+				// #endif
+			}
 		}
 	}
 </script>
@@ -484,7 +569,7 @@
 
 	.uni-common-mt {
 		margin-top: $space-size-normal;
-		border-bottom: 0.5px solid #D9D9D9;
+		border-bottom: $border-style-basic;
 		width: 100%;
 		box-sizing: border-box;
 	}
@@ -492,10 +577,14 @@
 	.home-bars .box {
 		position: relative;
 		padding: $space-size-large 0;
-		margin: 0 $space-size-large;
+		margin: 0 $space-size-large 0 $space-size-huge;
 		box-sizing: border-box;
 		width: calc(100% - 30upx);
-		border-bottom: 0.5px dashed #D9D9D9;
+		// border-bottom: 0.5px dashed #D9D9D9;
+	}
+	
+	.home-bars .box + .box {
+		border-top: $border-style-basic;
 	}
 
 	.home-bars .box.horizontal {
@@ -578,6 +667,11 @@
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		line-height: 1.5;
+
+		.wxParse {
+			color: $font-color-grey;
+			overflow: hidden;
+		}
 	}
 
 	.home-bars .loading-more {
@@ -616,5 +710,60 @@
 	.home-bars .vertical .time .text {
 		font-size: $font-size-small;
 		color: $font-color-grey;
+	}
+
+	.stance-news {
+		.stance {
+			padding: $space-size-huge;
+			// border-bottom: 0.5px dashed #D9D9D9;
+
+			&.vertical {
+				.title {
+					height: 32upx;
+					border-radius: 32upx;
+					width: 80%;
+					background: $bg-color-grey;
+				}
+
+				.time {
+					margin-top: $space-size-huge;
+					height: 26upx;
+					border-radius: 26upx;
+					background: $bg-color-grey;
+					width: 60%;
+				}
+			}
+
+			&.horizontal {
+				display: flex;
+				align-items: center;
+
+				.time {
+					width: 100upx;
+					margin-right: $space-size-large;
+					height: 100upx;
+					background: $bg-color-grey;
+					border-radius: $radius-size-complete;
+				}
+
+				.text {
+					width: 86%;
+
+					.title {
+						height: 32upx;
+						border-radius: 32upx;
+						background: $bg-color-grey;
+					}
+
+					.detail {
+						margin-top: $space-size-huge;
+						height: 26upx;
+						border-radius: 26upx;
+						background: $bg-color-grey;
+						width: 80%;
+					}
+				}
+			}
+		}
 	}
 </style>

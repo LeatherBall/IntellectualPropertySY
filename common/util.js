@@ -114,6 +114,59 @@ function checkAppVersion(isManual, onSuccess, onError) {
 	});
 }
 
+
+/**
+ * 获取文章栏目
+ * @param {Object} param 相关参数
+ * @param {Object} callback
+ */
+function getArticleList(param, callback) {
+	const data = {
+		pageIndex: param.pageIndex || 0,
+		pageSize: param.pageSize || 10,
+		columnId: param.columnId
+	}
+	uni.request({
+		method: 'GET',
+		url: param.ip + 'article/mobile/article.xhtml',
+		data: data,
+		success: (res) => {
+			callback(res.data);
+		},
+		fail: () => {
+			callback({
+				resultFlag: false
+			});
+		}
+	})
+}
+
+
+/**
+ * 获取文章详情
+ * @param {String} serviceIp 服务器IP
+ * @param {String} id 文章逻辑ID
+ * @param {Object} callback
+ */
+function getArticleDetail(serviceIp, id, callback) {
+	uni.request({
+		method: 'GET',
+		url: serviceIp + 'article/mobile/show.xhtml',
+		data: {
+			logicId: id
+		},
+		success: (res) => {
+			callback(res.data);
+		},
+		fail: () => {
+			callback({
+				resultFlag: false
+			});
+		}
+	})
+}
+
+
 /**
  * 日期工具类
  */
@@ -151,7 +204,7 @@ var DateUtils = {
 				fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 		return fmt;
 	},
-	
+
 	/**
 	 * 将指定毫秒转换成博客时间
 	 * @param {Object} milliseconds 毫秒
@@ -171,5 +224,7 @@ var DateUtils = {
 module.exports = {
 	checkRegExp: checkRegExp,
 	checkAppVersion: checkAppVersion,
-	DateUtils: DateUtils
+	DateUtils: DateUtils,
+	getArticleList: getArticleList,
+	getArticleDetail: getArticleDetail
 }

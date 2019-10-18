@@ -86,7 +86,7 @@
 							uni.showToast({
 								icon: 'none',
 								position: 'bottom',
-								title: '欢迎回来，' + res.data.object.userObj
+								title: '欢迎回来，' + res.data.object.userObj.userName
 							});
 						} else {
 							uni.showToast({
