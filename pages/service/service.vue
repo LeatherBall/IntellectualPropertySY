@@ -129,7 +129,9 @@
 				.image {
 					display: block;
 					width: 100%;
-
+					background-image: url("../../static/noPic.png");
+					background-size: 100%;
+					background-repeat: no-repeat;
 				}
 
 				.name {

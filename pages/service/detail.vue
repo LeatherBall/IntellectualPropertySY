@@ -1,13 +1,15 @@
 <template>
 	<view>
 		<view class="banner">
-			<image src="http://www.syftzip.com/TradeArea//files/TEST/2019-09-06/1567755992417839.jpg" mode="center" class="image"></image>
+			<video v-if="res.isType=='video'" class="image" id="myVideo" :src="res.mp4video"
+                    @error="videoErrorCallback" controls></video>
+			<image v-else src="http://www.syftzip.com/TradeArea//files/TEST/2019-09-06/1567755992417839.jpg" mode="center" class="image"></image>
+		</view>
+		<view class="dept">
 			<view class="desc">
 				<text class="title">{{obj.trainName}}</text>
 				<text class="time">{{obj.createTimeStr}}</text>
 			</view>
-		</view>
-		<view class="dept">
 			<view class="tt">
 				组织单位：{{obj.trainorg}}
 			</view>
@@ -41,7 +43,8 @@
 		data() {
 			return {
 				htmlNodes: '',
-				obj:{}
+				obj:{},
+				res:{}
 			}
 		},
 		onLoad(e) {
@@ -101,7 +104,7 @@
 					success: (data) => {
 						var res = data.data;
 						console.log(res);
-						
+						this.res = res.object
 					}
 				});
 			}
@@ -155,6 +158,21 @@
 	.dept {
 		padding: $space-size-huge;
 		color: $font-color-sec;
+		.desc {
+			z-index: 2;
+			width: 100%;
+
+			text {
+				display: block;
+			}
+
+			.title {
+				font-size: $font-size-huge;
+				font-weight: bold;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+		}
 	}
 
 	.detail {
