@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="banner">
-			<video v-if="res.isType=='video'" class="image" id="myVideo" :src="res.mp4video"
-                    @error="videoErrorCallback" controls></video>
+			<video v-if="res.isType=='video'" class="image" id="myVideo" :src="res.mp4video" @error="videoErrorCallback"
+			 controls></video>
 			<image v-else src="http://www.syftzip.com/TradeArea//files/TEST/2019-09-06/1567755992417839.jpg" mode="center" class="image"></image>
 		</view>
 		<view class="dept">
@@ -37,14 +37,14 @@
 <script>
 	import uParse from '@/components/gaoyia-parse/parse.vue'
 	export default {
-		components:{
+		components: {
 			uParse
 		},
 		data() {
 			return {
 				htmlNodes: '',
-				obj:{},
-				res:{}
+				obj: {},
+				res: {}
 			}
 		},
 		onLoad(e) {
@@ -55,24 +55,24 @@
 		},
 		methods: {
 			preview(src, e) {
-			  // do something
+				// do something
 			},
 			navigate(href, e) {
-			  // do something
-			  console.log(href)
-			  uni.downloadFile({
-			      url: href, //仅为示例，并非真实的资源
-			      success: (res) => {
-			          if (res.statusCode === 200) {
+				// do something
+				console.log(href)
+				uni.downloadFile({
+					url: href, //仅为示例，并非真实的资源
+					success: (res) => {
+						if (res.statusCode === 200) {
 							console.log('下载成功');
-						uni.showToast({
-							icon: 'success',
-							position: 'bottom',
-							title: '下载成功'
-						});
-			          }
-			      }
-			  });
+							uni.showToast({
+								icon: 'success',
+								position: 'bottom',
+								title: '下载成功'
+							});
+						}
+					}
+				});
 			},
 			getDetail() {
 				uni.request({
@@ -87,6 +87,9 @@
 						var sinSelList = res.object.sinSelList
 						this.obj.createTimeStr = this.obj.createTimeStr.substring(0, 10)
 						this.htmlNodes = res.object.obj.content;
+						if (this.htmlNodes == "") {
+							this.htmlNodes = "暂无培训详情"
+						}
 						for (var j = 0; j < sinSelList.length; j++) {
 							if (this.obj.trainType == sinSelList[j].selectOrder) {
 								this.obj.trainType = sinSelList[j].selectName
@@ -95,7 +98,7 @@
 					}
 				});
 			},
-			getOnline(){
+			getOnline() {
 				uni.request({
 					url: this.$servicePath + 'online/mobile/onlineLearningQt.xhtml',
 					data: {
@@ -109,8 +112,7 @@
 				});
 			}
 		},
-		onShow() {
-		}
+		onShow() {}
 	}
 </script>
 
@@ -156,8 +158,9 @@
 	}
 
 	.dept {
-		padding: $space-size-huge;
+		padding: 20rpx 30rpx;
 		color: $font-color-sec;
+
 		.desc {
 			z-index: 2;
 			width: 100%;
@@ -177,7 +180,7 @@
 
 	.detail {
 		border-top: 0.5px solid #eee;
-		padding: $space-size-huge;
+		padding: 20rpx 30rpx;
 
 		.title {
 			font-size: $font-size-large;
