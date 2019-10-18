@@ -5,7 +5,8 @@ import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
 
 Vue.config.productionTip = false
 
-Vue.prototype.$servicePath = 'http://192.168.141.106:8180/TradeArea/';
+// Vue.prototype.$servicePath = 'http://192.168.141.106:8180/TradeArea/';
+Vue.prototype.$servicePath = 'http://192.168.141.203:98/TradeArea/';
 
 Vue.component('uni-icons', uniIcons);
 Vue.component('uni-load-more', uniLoadMore)
