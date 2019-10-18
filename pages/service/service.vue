@@ -2,24 +2,24 @@
 	<view>
 		<view class="pro-list">
 			<view class="sub-list">
-				<view class="pro" v-for="(item, index) in products" :key="index" @click="showInfo">
-					<image src="../../static/zhuanlisq.jpg" mode="widthFix" class="image"></image>
+				<view class="pro" v-for="(item, index) in products" :key="index" v-if="index%2==0" @click="showInfo" :data-logicid="item.logicId">
+					<image :src="item.fileUrl" mode="widthFix" class="image"></image>
 					<view class="name ellipsis-two">
-						企业忙转型，专利来“看家”
+						{{item.trainName}}
 					</view>
 					<view class="factory ellipsis">
-						知识产权培训
+						{{item.trainType}}
 					</view>
 				</view>
 			</view>
 			<view class="sub-list">
-				<view class="pro" v-for="(item, index) in products" :key="index" @click="showInfo">
-					<image src="../../static/zhuanlisq.jpg" mode="widthFix" class="image"></image>
+				<view class="pro" v-for="(item, index) in products" :key="index" v-if="index%2==1" @click="showInfo" :data-logicid="item.logicId">
+					<image :src="item.fileUrl" mode="widthFix" class="image"></image>
 					<view class="name ellipsis-two">
-						企业忙转型，专利来“看家”
+						{{item.trainName}}
 					</view>
 					<view class="factory ellipsis">
-						知识产权培训
+						{{item.trainType}}
 					</view>
 				</view>
 			</view>
@@ -32,46 +32,78 @@
 		components: {},
 		data() {
 			return {
+				hasMore: true,
+				page: 0,
 				products: []
 			};
 		},
+		onLoad(e) {
+			this.getList(0);
+		},
+		onPullDownRefresh() {
+			console.log('refresh');
+			var that = this;
+			that.products = [],
+				that.hasMore = true,
+				that.page = 0,
+				that.getList(0);
+			uni.stopPullDownRefresh();
+		},
+
+		onReachBottom() {
+			var that = this;
+			if (!that.hasMore) return
+			// Do something when page reach bottom.
+			that.getList(that.page)
+		},
 		methods: {
-			showInfo() {
+			getList(page) {
+				uni.request({
+					url: this.$servicePath + 'online/mobile/online.xhtml',
+					method: 'GET',
+					dataType: 'jsonp',
+					data: {
+						pageIndex: page,
+						pageSize: 10
+					},
+					success: (res) => {
+						this.page = ++page;
+						var res = JSON.parse(res.data);
+						var list = res.object.presidents.results;
+						var typeList = res.object.sinSelList;
+						var arr = this.products;
+						if (list.length >= 10) {
+							this.hasMore = true;
+						} else {
+							this.hasMore = false;
+						}
+						if (res.object.totalcount == 0) {
+							this.length = 0
+						} else {
+							this.length = 1
+							for (var i = 0; i < list.length; i++) {
+								if (list[i].fileUrl != '') {
+									list[i].fileUrl = this.$servicePath + list[i].fileUrl;
+								}
+								for (var j = 0; j < typeList.length; j++) {
+									if (list[i].trainType == typeList[j].selectOrder) {
+										list[i].trainType = typeList[j].selectName
+									}
+								}
+								list[i].createTimeStr = list[i].createTimeStr.substring(0, 10)
+								arr.push(list[i])
+							}
+						}
+						this.products = arr;
+					}
+				});
+			},
+			showInfo(e) {
+				var logicId = e.currentTarget.dataset.logicid;
 				uni.navigateTo({
-					url: 'detail'
+					url: 'detail?logicId='+logicId
 				})
 			}
-		},
-		onShow() {
-			uni.request({
-				method: 'GET',
-				url: this.$servicePath + 'online/mobile/online.xhtml',
-				data: {
-				},
-				success: (res) => {
-					if (res.data.resultFlag) {
-						
-						this.products = new Array(20);
-							
-					} else {
-						uni.showToast({
-							icon: 'none',
-							position: 'bottom',
-							title: res.data.resultMsg
-						});
-					}
-				},
-				fail: (res) => {
-					uni.showToast({
-						icon: 'none',
-						position: 'center',
-						title: '登录失败，请稍后再试'
-					})
-				},
-				complete: () => {
-					this.isRotate = false;
-				}
-			})
 		}
 	}
 </script>

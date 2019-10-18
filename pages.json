@@ -34,7 +34,8 @@
 		}, {
 			"path": "pages/service/service",
 			"style": {
-				"navigationBarTitleText": "培训服务"
+				"navigationBarTitleText": "培训服务",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
