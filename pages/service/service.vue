@@ -102,7 +102,7 @@
 
 	.pro-list {
 		// display: flex;
-		margin: $space-size-huge;
+		margin: $space-size-huge $space-size-normal;
 		overflow: hidden;
 
 		.pro {

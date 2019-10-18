@@ -12,20 +12,21 @@
 
 		<view class="main-wrapper">
 			<view class="home-grid">
-				<ct-module-menu :menus="gridList "></ct-module-menu>
+				<ct-module-menu :menus="gridList"></ct-module-menu>
 			</view>
 
 			<view class="uni-swiper-msg">
 				<view class="uni-swiper-msg-text">
 					<text>通知公告</text>
 				</view>
-				<swiper vertical="true" autoplay="true" circular="true" interval="3000">
+				<swiper vertical="true" autoplay="true" circular="true" interval="3000" class="scroll-msg">
 					<swiper-item v-for="item in msgList" :key="item.logicId" @click="openUrl(item.ext6)">
-						<view class="home-msg">
+						<view class="home-msg text-sm">
 							{{item.title}}
 						</view>
 					</swiper-item>
 				</swiper>
+				<view class="more text-df" @click="noticeMore">更多</view>
 			</view>
 
 			<!-- 新闻动态 -->
@@ -40,7 +41,7 @@
 						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.createTimeStr}}</text></view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more" v-show="listState.newsCount > 3">
+					<view class="loading-more" v-show="listState.newsCount > 3" @click="newsMore">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
@@ -161,7 +162,7 @@
 				gridList: [{
 						img: '../../static/icon/xinwendongtai.png',
 						name: '新闻动态',
-						page: '../common/article/list?pageTitle=新闻动态'
+						page: '../common/article/list?pageTitle=新闻动态&columnId=155540151100326'
 					},
 					{
 						img: '../../static/icon/shenbaozhinan.png',
@@ -209,8 +210,18 @@
 						page: ''
 					},
 					{
-						img: '../../static/icon/banquanshenbao.png',
-						name: '英雄联盟',
+						img: '../../static/icon/zlzr.png',
+						name: '专利转让',
+						page: '../home/patent'
+					},
+					{
+						img: '../../static/icon/sbzr.png',
+						name: '商标转让',
+						page: ''
+					},
+					{
+						img: '../../static/icon/bqzr.png',
+						name: '版权转让',
 						page: ''
 					}
 				],
@@ -425,6 +436,16 @@
 				// #ifdef H5
 				window.open(url);
 				// #endif
+			},
+			newsMore() {
+				uni.navigateTo({
+					url: '../common/article/list?pageTitle=新闻动态&columnId=155540151100326'
+				})
+			},
+			noticeMore() {
+				uni.navigateTo({
+					url: '../common/article/list?pageTitle=通知公告&columnId=155540151100315'
+				})
 			}
 		}
 	}
@@ -498,28 +519,53 @@
 	.uni-swiper-msg {
 		background: $bg-color-grey;
 		margin: $space-size-small 0;
-		padding: $space-size-large $space-size-normal;
+		padding: $space-size-large;
 		box-sizing: border-box;
-	}
-
-	.uni-swiper-msg-icon {
-		margin: 0 $space-size-small;
-	}
-
-	.uni-swiper-msg-text {
-		width: 200upx;
-		margin-right: $space-size-normal;
-		font-weight: bold;
-		text-align: center;
-		font-size: $font-size-normal;
-	}
-
-	.home-msg {
-		width: 100%;
-		color: $font-color-grey;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		
+		.scroll-msg {
+			margin: 0 $space-size-large;
+			.home-msg {
+				white-space: nowrap;
+			}
+		}
+		
+		.uni-swiper-msg-icon {
+			margin: 0 $space-size-small;
+		}
+		
+		.uni-swiper-msg-text {
+			font-weight: bold;
+			text-align: center;
+			font-size: $font-size-normal;
+			white-space: nowrap;
+		}
+		
+		.more {
+			white-space: nowrap;
+			color: $font-color-base;
+			padding-left: $space-size-huge;
+			position: relative;
+			
+			&::before {
+				position: absolute;
+				content: '';
+				width: 1px;
+				height: 20upx;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 0;
+				background: $font-color-grey;
+			}
+		}
+		
+		.home-msg {
+			width: 100%;
+			color: $font-color-grey;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			line-height: 2;
+		}
 	}
 
 	.line-h {
@@ -680,6 +726,7 @@
 		padding-top: $space-size-normal;
 		padding-bottom: $space-size-normal;
 		text-align: center;
+		border-top: $border-style-basic;
 	}
 
 	.home-bars .loading-more:active {

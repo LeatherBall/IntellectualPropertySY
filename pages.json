@@ -74,6 +74,22 @@
 			"style": {
 				"navigationBarTitleText": "账户信息"
 			}
+		}, {
+			"path": "pages/home/patent",
+			"style": {
+				"navigationBarTitleText": "专利转让",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/home/patentinfo",
+			"style": {
+				"navigationBarTitleText": "专利转让详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

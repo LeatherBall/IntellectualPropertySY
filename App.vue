@@ -69,6 +69,7 @@
 	@import './common/uni.css';
 	@import './common/base.css';
 	@import './common/colorui.css';
+	@import './common/cuIcon.css';
 	@import url("/components/gaoyia-parse/parse.css");
 
 	@font-face {
