@@ -1,9 +1,6 @@
 <template>
 	<view class="container">
-		<image src="../../static/image/t1_03.png" mode="" class="image" @click="openUrl('http://cponline.sipo.gov.cn/')"></image>
-		<image src="../../static/image/t1_06.png" mode="" class="image" @click="openUrl('http://wssq.saic.gov.cn:9080/tmsve/')"></image>
-		<image src="../../static/image/t1_08.png" mode="" class="image" @click="openUrl('http://apply.ccopyright.com.cn/cpcc/column_list_bqdj.jsp')"></image>
-		<image src="../../static/image/t1_10.png" mode="" class="image" @click="openUrl('http://www.cgi.gov.cn/Home/Default/')"></image>
+		<image :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" :src="item.image" mode="" class="image" @click="openUrl" v-for="(item,index) in elements" :key="index" :data-url="item.url"></image>
 	</view>
 </template>
 
@@ -11,10 +8,25 @@
 	export default {
 		data() {
 			return {
+				elements: [{
+						image: '../../static/image/t1_03.png',
+						url: 'http://cponline.sipo.gov.cn/'
+					},{
+						image: '../../static/image/t1_06.png',
+						url: 'http://wssq.saic.gov.cn:9080/tmsve/'
+					},{
+						image: '../../static/image/t1_08.png',
+						url: 'http://apply.ccopyright.com.cn/cpcc/column_list_bqdj.jsp'
+					},{
+						image: '../../static/image/t1_10.png',
+						url: 'http://www.cgi.gov.cn/Home/Default/'
+					}
+				]
 			};
 		},
 		methods:{
-			openUrl(url) {
+			openUrl(e) {
+				var url = e.currentTarget.dataset.url;
 				// #ifdef APP-PLUS
 				plus.runtime.openWeb(url);
 				// #endif

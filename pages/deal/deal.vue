@@ -1,8 +1,6 @@
 <template>
 	<view class="container">
-		<image src="../../static/image/t3_03.png" mode="" class="image"></image>
-		<image src="../../static/image/t3_06.png" mode="" class="image"></image>
-		<image src="../../static/image/t3_08.png" mode="" class="image"></image>
+		<image :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" :src="item.image" mode="" class="image" v-for="(item,index) in elements" :key="index" :data-url="item.url"></image>
 	</view>
 </template>
 
@@ -10,6 +8,17 @@
 	export default {
 		data() {
 			return {
+				elements: [{
+						image: '../../static/image/t3_03.png',
+						url: ''
+					},{
+						image: '../../static/image/t3_06.png',
+						url: ''
+					},{
+						image: '../../static/image/t3_08.png',
+						url: ''
+					}
+				]
 			};
 		}
 	}

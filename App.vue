@@ -70,6 +70,7 @@
 	@import './common/base.css';
 	@import './common/colorui.css';
 	@import './common/cuIcon.css';
+	@import "./common/animation.css";
 	@import url("/components/gaoyia-parse/parse.css");
 
 	@font-face {
@@ -80,5 +81,33 @@
 	.iconfont {
 		font-family: iconfont;
 		display: inline-block;
+	}
+	
+	@keyframes show {
+		0% {
+			transform: translateY(-50px);
+		}
+	
+		60% {
+			transform: translateY(40upx);
+		}
+	
+		100% {
+			transform: translateY(0px);
+		}
+	}
+	
+	@-webkit-keyframes show {
+		0% {
+			transform: translateY(-50px);
+		}
+	
+		60% {
+			transform: translateY(40upx);
+		}
+	
+		100% {
+			transform: translateY(0px);
+		}
 	}
 </style>

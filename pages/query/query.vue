@@ -1,9 +1,6 @@
 <template>
 	<view class="container">
-		<image src="../../static/image/t2_03.png" mode="" class="image" @click="openUrl('http://cpquery.cnipa.gov.cn/')"></image>
-		<image src="../../static/image/t2_06.png" mode="" class="image" @click="openUrl('http://wsjs.saic.gov.cn/?SVVVdE0o=KGmhcakkaZHkaZHka0ExbesZFAi6etCP27OgNPzHVc9qqWW')"></image>
-		<image src="../../static/image/t2_08.png" mode="" class="image" @click="openUrl('http://www.ccopyright.com.cn/')"></image>
-		<image src="../../static/image/t2_10.png" mode="" class="image" @click="openUrl('http://www.cgi.gov.cn/Products/List/')"></image>
+		<image :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" :src="item.image" mode="" class="image" @click="openUrl" v-for="(item,index) in elements" :key="index" :data-url="item.url"></image>
 	</view>
 </template>
 
@@ -11,10 +8,25 @@
 	export default {
 		data() {
 			return {
+				elements: [{
+						image: '../../static/image/t2_03.png',
+						url: 'http://cpquery.cnipa.gov.cn/'
+					},{
+						image: '../../static/image/t2_06.png',
+						url: 'http://wsjs.saic.gov.cn/?SVVVdE0o=KGmhcakkaZHkaZHka0ExbesZFAi6etCP27OgNPzHVc9qqWW'
+					},{
+						image: '../../static/image/t2_08.png',
+						url: 'http://www.ccopyright.com.cn/'
+					},{
+						image: '../../static/image/t2_10.png',
+						url: 'http://www.cgi.gov.cn/Products/List/'
+					}
+				]
 			};
 		},
 		methods:{
-			openUrl(url) {
+			openUrl(e) {
+				var url = e.currentTarget.dataset.url;
 				// #ifdef APP-PLUS
 				plus.runtime.openWeb(url);
 				// #endif
