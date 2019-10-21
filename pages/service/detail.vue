@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<view class="banner">
+		<view class="banner" v-if="res.isType!='other'">
 			<video v-if="res.isType=='video'" class="image" id="myVideo" :src="res.mp4video" @error="videoErrorCallback"
 			 controls></video>
-			<image v-else src="http://www.syftzip.com/TradeArea//files/TEST/2019-09-06/1567755992417839.jpg" mode="center" class="image"></image>
+			<image v-else src="../../static/noContainer.jpg" mode="center" class="image"></image>
 		</view>
 		<view class="dept">
 			<view class="desc">
@@ -28,9 +28,15 @@
 				<u-parse :content="htmlNodes" @preview="preview" @navigate="navigate"></u-parse>
 			</view>
 		</view>
-		<!-- <view class="button-bottom">
-			<button type="primary">在线学习</button>
-		</view> -->
+		<view class="file" v-if="res.isType=='other'">
+			<p style="font-weight: bold;">附件</p>
+			<div class="add" opt="file">
+				<div class="base-data-file"> <img src="../../components/File-Tools/images/xlsx.png">
+					<p class="title" style="height: auto">1570868227690785.xlsx</p>
+					<p><i class="iconfont icon-ziliaoiconx"></i>2.55 MB</p>
+				</div>
+			</div>
+		</view>
 	</view>
 </template>
 
@@ -119,6 +125,71 @@
 <style lang="scss">
 	page {
 		background: $bg-color-white;
+	}
+	
+	.file{
+		width: 100%;
+		padding: 20rpx;
+		box-sizing: border-box;
+	}
+
+	.file p {
+		font-size: 32rpx;
+		margin-bottom: 10rpx;
+		// font-weight: bold;
+	}
+
+	.base-data-file {
+		width: calc(100% - 80rpx);
+		min-height:  64rpx;
+		padding-left: 80rpx;
+		position: relative;
+	}
+
+	.base-data-file+.base-data-file {
+		margin-top: 16rpx;
+	}
+
+	.base-data-file img {
+		width: 64rpx !important;
+		height: 64rpx !important;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: auto;
+		object-fit: cover;
+		border-radius: 0;
+	}
+
+	.base-data-file .file-cover {
+		width: 64rpx !important;
+		height: 64rpx !important;
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 10;
+		object-fit: cover;
+	}
+
+	.base-data-file p {
+		height: 26rpx;
+		line-height: 26rpx;
+		font-size: 28rpx;
+		color: #7d7d7d;
+	}
+
+	.base-data-file p i {
+		margin-right: 6rpx;
+	}
+
+	.base-data-file .title {
+		height: auto;
+		line-height: 32rpx;
+		margin-bottom: 6rpx;
+		text-align: justify;
+		font-size: var(--fonts-c) !important;
+		/*color: var(--color-o);*/
+		padding: unset !important;
 	}
 
 	.banner {
