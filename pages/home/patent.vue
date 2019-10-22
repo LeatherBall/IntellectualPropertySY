@@ -3,10 +3,12 @@
 		<!-- 顶部筛选栏 -->
 		<view class="screen">
 			<view class="item" @click="sortTime" :class="timeTOP ? 'text-blue' : 'text-black'">
-				最新 <!-- <text class="tag cuIcon-fold"></text> -->
+				最新
+				<!-- <text class="tag cuIcon-fold"></text> -->
 			</view>
 			<view class="item" @click="sortPrice" :class="priceTOP ? 'text-blue' : 'text-black'">
-				价格 <!-- <text class="tag cuIcon-unfold"></text> -->
+				价格
+				<!-- <text class="tag cuIcon-unfold"></text> -->
 			</view>
 			<view class="item" @click="showModal">
 				筛选 <text class="tag cuIcon-filter"></text>
@@ -112,12 +114,12 @@
 				}
 			},
 			sortPrice() {
-				 if (!this.priceTOP) {
-					 this.priceTOP = true;
-					 this.timeTOP = false;
-					 this.filter.pxSearch = 'PRICE';
-					 this.getList('refresh')
-				 }
+				if (!this.priceTOP) {
+					this.priceTOP = true;
+					this.timeTOP = false;
+					this.filter.pxSearch = 'PRICE';
+					this.getList('refresh')
+				}
 			},
 			showModal() {
 				this.showScreen = true;
@@ -191,6 +193,13 @@
 						this.list.push.apply(this.list, object.presidents.results);
 						const count = object.presidents.count;
 						this.status = (this.pageIndex + 1) * this.pageSize >= count ? 'noMore' : 'more';
+					},
+					fail: () => {
+						this.status = 'error';
+						if (type == 'refresh') {
+							this.list = [];
+							uni.stopPullDownRefresh();
+						}
 					}
 				})
 			},
@@ -219,7 +228,7 @@
 		left: 0;
 		width: 100%;
 		z-index: 99;
-		
+
 		.item {
 			height: 80upx;
 			line-height: 80upx;

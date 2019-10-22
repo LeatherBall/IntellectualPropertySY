@@ -180,6 +180,13 @@
 						this.list.push.apply(this.list, object.presidents.results);
 						const count = object.presidents.count;
 						this.status = (this.pageIndex + 1) * this.pageSize >= count ? 'noMore' : 'more';
+					},
+					fail: () => {
+						this.status = 'error';
+						if (type == 'refresh') {
+							this.list = [];
+							uni.stopPullDownRefresh();
+						}
 					}
 				})
 			},

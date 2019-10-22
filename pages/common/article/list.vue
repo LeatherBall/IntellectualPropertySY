@@ -62,6 +62,12 @@
 						const count = res.object.presidents.count;
 						this.status = (this.pageIndex + 1) * this.pageSize >= count ? 'noMore' : 'more';
 					}
+				}, () => {
+					if (type == 'refresh') {
+						this.list = [];
+						uni.stopPullDownRefresh();
+					}
+					this.status = 'error';
 				})
 			},
 			showInfo(url) {

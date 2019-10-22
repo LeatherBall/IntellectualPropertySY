@@ -289,6 +289,11 @@
 				url: page
 			})
 		},
+		onPullDownRefresh() {
+			this.getNotice();
+			this.getNews();
+			this.getTransferList('refresh');
+		},
 		methods: {
 			homeBarChange(e) {
 				this.homeBarCurrent = e.detail.current;
@@ -353,78 +358,89 @@
 					}
 				})
 			},
-			// 获取专利、商标、版权转让列表
-			getTransferList() {
-				this.bars2En.forEach(itemBar => {
-					if (itemBar == 'patent') {
-						uni.request({
-							method: 'GET',
-							url: this.$servicePath + 'patent/mobile/patent.xhtml',
-							data: {
-								pageIndex: 0,
-								pageSize: 3
-							},
-							success: (res) => {
-								const list = res.data.object.presidents.results;
-								list.forEach(itemData => {
-									itemData.title = itemData.patentName;
-									const date = itemData.createTimeStr;
-									if (date) {
-										itemData.year = date.substring(0, 4);
-										itemData.day = date.substring(5, 10);
-									}
-								})
-								this.tabBars2Data[itemBar] = list;
-								this.listState.patentCount = res.data.object.presidents.count;
-								this.listState.patentLoad = true;
+			// 获取装让信息列表
+			getTransferList(type) {
+				// 专利转让列表
+				uni.request({
+					method: 'GET',
+					url: this.$servicePath + 'patent/mobile/patent.xhtml',
+					data: {
+						pageIndex: 0,
+						pageSize: 3
+					},
+					success: (res) => {
+						const list = res.data.object.presidents.results;
+						list.forEach(itemData => {
+							itemData.title = itemData.patentName;
+							const date = itemData.createTimeStr;
+							if (date) {
+								itemData.year = date.substring(0, 4);
+								itemData.day = date.substring(5, 10);
 							}
 						})
-					} else if (itemBar == 'trademark') {
-						uni.request({
-							method: 'GET',
-							url: this.$servicePath + 'trademark/mobile/trademark.xhtml',
-							data: {
-								pageIndex: 0,
-								pageSize: 3
-							},
-							success: (res) => {
-								const list = res.data.object.presidents.results;
-								list.forEach(itemData => {
-									itemData.title = itemData.trademarkName;
-									const date = itemData.createTimeStr;
-									if (date) {
-										itemData.year = date.substring(0, 4);
-										itemData.day = date.substring(5, 10);
-									}
-								})
-								this.tabBars2Data[itemBar] = list;
-								this.listState.trademarkCount = res.data.object.presidents.count;
-								this.listState.trademarkLoad = true;
+						this.tabBars2Data[itemBar] = list;
+						this.listState.patentCount = res.data.object.presidents.count;
+						this.listState.patentLoad = true;
+					}
+				})
+				// 商标转让列表
+				uni.request({
+					method: 'GET',
+					url: this.$servicePath + 'copyright/mobile/copyright.xhtml',
+					data: {
+						pageIndex: 0,
+						pageSize: 3
+					},
+					success: (res) => {
+						const list = res.data.object.presidents.results;
+						list.forEach(itemData => {
+							itemData.title = itemData.copyrightname;
+							const date = itemData.createTimeStr;
+							if (date) {
+								itemData.year = date.substring(0, 4);
+								itemData.day = date.substring(5, 10);
 							}
 						})
-					} else {
-						uni.request({
-							method: 'GET',
-							url: this.$servicePath + 'copyright/mobile/copyright.xhtml',
-							data: {
-								pageIndex: 0,
-								pageSize: 3
-							},
-							success: (res) => {
-								const list = res.data.object.presidents.results;
-								list.forEach(itemData => {
-									itemData.title = itemData.copyrightname;
-									const date = itemData.createTimeStr;
-									if (date) {
-										itemData.year = date.substring(0, 4);
-										itemData.day = date.substring(5, 10);
-									}
-								})
-								this.tabBars2Data[itemBar] = list;
-								this.listState.copyrightCount = res.data.object.presidents.count;
-								this.listState.copyrightLoad = true;
+						this.tabBars2Data[itemBar] = list;
+						this.listState.copyrightCount = res.data.object.presidents.count;
+						this.listState.copyrightLoad = true;
+					}
+				})
+				// 版权转让列表
+				uni.request({
+					method: 'GET',
+					url: this.$servicePath + 'trademark/mobile/trademark.xhtml',
+					data: {
+						pageIndex: 0,
+						pageSize: 3
+					},
+					success: (res) => {
+						const list = res.data.object.presidents.results;
+						list.forEach(itemData => {
+							itemData.title = itemData.trademarkName;
+							const date = itemData.createTimeStr;
+							if (date) {
+								itemData.year = date.substring(0, 4);
+								itemData.day = date.substring(5, 10);
 							}
 						})
+						this.tabBars2Data[itemBar] = list;
+						this.listState.trademarkCount = res.data.object.presidents.count;
+						this.listState.trademarkLoad = true;
+						
+						if (type == 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					},
+					fail: () => {
+						if (type == 'refresh') {
+							uni.stopPullDownRefresh();
+							uni.showToast({
+								title: '内容获取失败',
+								position: 'bottom',
+								icon: 'none'
+							})
+						}
 					}
 				})
 			},
@@ -521,31 +537,32 @@
 		margin: $space-size-small 0;
 		padding: $space-size-large;
 		box-sizing: border-box;
-		
+
 		.scroll-msg {
 			margin: 0 $space-size-large;
+
 			.home-msg {
 				white-space: nowrap;
 			}
 		}
-		
+
 		.uni-swiper-msg-icon {
 			margin: 0 $space-size-small;
 		}
-		
+
 		.uni-swiper-msg-text {
 			font-weight: bold;
 			text-align: center;
 			font-size: $font-size-normal;
 			white-space: nowrap;
 		}
-		
+
 		.more {
 			white-space: nowrap;
 			color: $font-color-base;
 			padding-left: $space-size-huge;
 			position: relative;
-			
+
 			&::before {
 				position: absolute;
 				content: '';
@@ -557,7 +574,7 @@
 				background: $font-color-grey;
 			}
 		}
-		
+
 		.home-msg {
 			width: 100%;
 			color: $font-color-grey;
@@ -627,8 +644,8 @@
 		width: calc(100% - 30upx);
 		// border-bottom: 0.5px dashed #D9D9D9;
 	}
-	
-	.home-bars .box + .box {
+
+	.home-bars .box+.box {
 		border-top: $border-style-basic;
 	}
 
