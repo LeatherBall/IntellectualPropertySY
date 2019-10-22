@@ -14,7 +14,8 @@
 							"fontWeight": "normal"
 						}]
 					}
-				}
+				},
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/query/query",

@@ -11,6 +11,8 @@
 				</view>
 			</view>
 		</view>
+		<!-- 下拉加载 -->
+		<uni-load-more :status="status" />
 	</view>
 </template>
 
@@ -19,69 +21,68 @@
 		components: {},
 		data() {
 			return {
-				hasMore: true,
-				page: 0,
-				products: []
+				page: -1,
+				products: [],
+				status: 'more',
 			};
 		},
 		onLoad(e) {
-			this.getList(0);
+			this.getList();
 		},
 		onPullDownRefresh() {
-			console.log('refresh');
-			var that = this;
-			that.products = [],
-				that.hasMore = true,
-				that.page = 0,
-				that.getList(0);
-			uni.stopPullDownRefresh();
+			this.getList('refresh');
 		},
-
 		onReachBottom() {
-			var that = this;
-			if (!that.hasMore) return
-			// Do something when page reach bottom.
-			that.getList(that.page)
+			if (this.status != 'noMore') {
+				this.getList()
+			}
 		},
 		methods: {
-			getList(page) {
+			getList(type) {
+				this.status = 'loading';
+				if (type == 'refresh') {
+					this.page = -1;
+				}
 				uni.request({
 					url: this.$servicePath + 'online/mobile/online.xhtml',
 					method: 'GET',
-					dataType: 'jsonp',
 					data: {
-						pageIndex: page,
+						pageIndex: ++this.page,
 						pageSize: 10
 					},
 					success: (res) => {
-						this.page = ++page;
-						var res = JSON.parse(res.data);
+						if (type == 'refresh') {
+							this.products = [];
+							uni.stopPullDownRefresh();
+						}
+						var res = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
 						var list = res.object.presidents.results;
 						var typeList = res.object.sinSelList;
 						var arr = this.products;
-						if (list.length >= 10) {
-							this.hasMore = true;
-						} else {
-							this.hasMore = false;
-						}
-						if (res.object.totalcount == 0) {
-							this.length = 0
-						} else {
-							this.length = 1
-							for (var i = 0; i < list.length; i++) {
-								if (list[i].fileUrl != '') {
-									list[i].fileUrl = this.$servicePath + list[i].fileUrl;
-								}
-								for (var j = 0; j < typeList.length; j++) {
-									if (list[i].trainType == typeList[j].selectOrder) {
-										list[i].trainType = typeList[j].selectName
-									}
-								}
-								list[i].createTimeStr = list[i].createTimeStr.substring(0, 10)
-								arr.push(list[i])
+						
+						for (var i = 0; i < list.length; i++) {
+							if (list[i].fileUrl != '') {
+								list[i].fileUrl = this.$servicePath + list[i].fileUrl;
 							}
+							for (var j = 0; j < typeList.length; j++) {
+								if (list[i].trainType == typeList[j].selectOrder) {
+									list[i].trainType = typeList[j].selectName
+								}
+							}
+							list[i].createTimeStr = list[i].createTimeStr.substring(0, 10)
+							arr.push(list[i])
 						}
+						
 						this.products = arr;
+						const count = res.object.presidents.count;
+						this.status = (this.page + 1) * 10 >= count ? 'noMore' : 'more';
+					},
+					fail: () => {
+						if (type == 'refresh') {
+							this.products = [];
+							uni.stopPullDownRefresh();
+						}
+						this.status = 'error';
 					}
 				});
 			},
@@ -114,6 +115,7 @@
 			overflow: hidden;
 			margin-bottom: $space-size-huge;
 			height: 606rpx;
+
 			.image {
 				display: block;
 				width: 100%;

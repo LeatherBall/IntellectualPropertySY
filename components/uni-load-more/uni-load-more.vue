@@ -21,7 +21,7 @@
 			</view>
 		</view>
 		<text :style="{ color: color }" class="uni-load-more__text">
-			{{ status === 'more' ? contentText.contentdown : status === 'loading' ? contentText.contentrefresh : contentText.contentnomore }}
+			{{showText}}
 		</text>
 	</view>
 </template>
@@ -31,7 +31,7 @@
 		name: 'UniLoadMore',
 		props: {
 			status: {
-				// 上拉的状态：more-loading前；loading-loading中；noMore-没有更多了
+				// 上拉的状态：more-loading前；loading-loading中；noMore-没有更多了； error-内容获取失败
 				type: String,
 				default: 'more'
 			},
@@ -49,13 +49,30 @@
 					return {
 						contentdown: '上拉显示更多',
 						contentrefresh: '正在加载...',
-						contentnomore: '没有更多数据了'
+						contentnomore: '没有更多数据了',
+						contenterror: '网络不可用，请检查网络设置',
 					}
 				}
 			}
 		},
 		data() {
 			return {}
+		},
+		computed: {
+			showText() {
+				if (this.status === 'more') {
+					return this.contentText.contentdown;
+				}
+				if (this.status === 'loading') {
+					return this.contentText.contentrefresh;
+				}
+				if (this.status === 'noMore') {
+					return this.contentText.contentnomore;
+				}
+				if (this.status === 'error') {
+					return this.contentText.contenterror;
+				}
+			}
 		}
 	}
 </script>

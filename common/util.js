@@ -120,7 +120,7 @@ function checkAppVersion(isManual, onSuccess, onError) {
  * @param {Object} param 相关参数
  * @param {Object} callback
  */
-function getArticleList(param, callback) {
+function getArticleList(param, callback, error) {
 	const data = {
 		pageIndex: param.pageIndex || 0,
 		pageSize: param.pageSize || 10,
@@ -134,9 +134,7 @@ function getArticleList(param, callback) {
 			callback(res.data);
 		},
 		fail: () => {
-			callback({
-				resultFlag: false
-			});
+			error && error();
 		}
 	})
 }
