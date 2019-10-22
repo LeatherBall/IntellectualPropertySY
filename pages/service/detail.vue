@@ -30,18 +30,24 @@
 		</view>
 		<view class="file" v-if="res.isType=='other'">
 			<p style="font-weight: bold;">附件</p>
-			<div class="add" opt="file">
-				<div class="base-data-file"> <img src="../../components/File-Tools/images/xlsx.png">
-					<p class="title" style="height: auto">1570868227690785.xlsx</p>
-					<p><i class="iconfont icon-ziliaoiconx"></i>2.55 MB</p>
-				</div>
-			</div>
+			<view class="add" opt="file">
+				<view class="base-data-file" @tap="downloadFile">
+					<img :src="res.image">
+					<p class="title" style="height: auto">{{res.str}}</p>
+					<p><i class="iconfont icon-ziliaoiconx"></i>点击下载</p>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import uParse from '@/components/gaoyia-parse/parse.vue'
+	import uParse from '@/components/gaoyia-parse/parse.vue';
+	import {
+		FileIcon,
+		FileView,
+		FileBase
+	} from '../../components/File-Tools/src/filetools.js';
 	export default {
 		components: {
 			uParse
@@ -75,6 +81,37 @@
 								icon: 'success',
 								position: 'bottom',
 								title: '下载成功'
+							});
+							var filePath = res.tempFilePath;
+							uni.openDocument({
+								filePath: filePath,
+								success: function(res) {
+									console.log('打开文档成功');
+								}
+							});
+						}
+					}
+				});
+			},
+			downloadFile() {
+				// do something
+				console.log(this.res.otherURL)
+				uni.downloadFile({
+					url: this.res.otherURL, //仅为示例，并非真实的资源
+					success: (res) => {
+						if (res.statusCode === 200) {
+							console.log('下载成功');
+							uni.showToast({
+								icon: 'success',
+								position: 'bottom',
+								title: '下载成功'
+							});
+							var filePath = res.tempFilePath;
+							uni.openDocument({
+								filePath: filePath,
+								success: function(res) {
+									console.log('打开文档成功');
+								}
 							});
 						}
 					}
@@ -112,8 +149,16 @@
 					},
 					success: (data) => {
 						var res = data.data;
-						console.log(res);
-						this.res = res.object
+						this.res = res.object;
+						if(this.res.isType=='other'){
+							var name = this.res.otherURL.substr(this.res.otherURL.lastIndexOf('/'));
+							this.res.str = name.substring(1);//截取文件名称字符串
+							var type = this.res.otherURL.substr(this.res.otherURL.lastIndexOf(".")).substring(1);
+							this.res.image = FileIcon.getTypeIcon(type, 'purity');
+							var flag = FileBase.checkImage(type);
+							if (flag)
+								this.res.image = this.res.otherURL;
+						}
 					}
 				});
 			}
@@ -126,10 +171,10 @@
 	page {
 		background: $bg-color-white;
 	}
-	
-	.file{
+
+	.file {
 		width: 100%;
-		padding: 20rpx;
+		padding: 20rpx 30rpx;
 		box-sizing: border-box;
 	}
 
@@ -141,7 +186,7 @@
 
 	.base-data-file {
 		width: calc(100% - 80rpx);
-		min-height:  64rpx;
+		min-height: 64rpx;
 		padding-left: 80rpx;
 		position: relative;
 	}

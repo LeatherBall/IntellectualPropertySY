@@ -1,4 +1,4 @@
-FileIcon = (function () {
+const FileIcon = (function () {
 
     var array = [
         'ape', 'au', 'avi', 'bat', 'bin', 'bmp', 'cab', 'chm', 'css', 'dll', 'doc', 'docx', 'eml', 'f4v', 'fla', 'flac', 'flv', 'gif', 'hlp', 'html',
@@ -14,16 +14,16 @@ FileIcon = (function () {
         getTypeIcon: function (type) {
             for (var i = 0; i < array.length; i++) {
                 if (type == array[i]) {
-                    return 'adapter/File-Tools/images/' + type + '.png';
+                    return '/static/images/' + type + '.png';
                 }
             }
-            return 'adapter/File-Tools/images/temp.png';
+            return 'components/File-Tools/images/temp.png';
         }
     };
 
 })();
 
-FileView = (function () {
+const FileView = (function () {
 
     return {
 
@@ -883,7 +883,7 @@ FileView = (function () {
 
 })();
 
-FileBase = (function () {
+const FileBase = (function () {
 
     var unitArray = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
@@ -1140,7 +1140,7 @@ FileBase = (function () {
 
 })();
 
-FilePicture = (function () {
+const FilePicture = (function () {
     //检查参数和网络转态
     function DownloadFile(URL, Folder_Name, File_Name) {
         if (!URL || !Folder_Name || !File_Name) return;
@@ -1229,3 +1229,10 @@ FilePicture = (function () {
     };
 
 })();
+
+module.exports = {
+	FilePicture: FilePicture,
+	FileBase: FileBase,
+	FileView: FileView,
+	FileIcon: FileIcon
+}
