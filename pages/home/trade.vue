@@ -3,10 +3,12 @@
 		<!-- 顶部筛选栏 -->
 		<view class="screen">
 			<view class="item" @click="sortTime" :class="timeTOP ? 'text-blue' : 'text-black'">
-				最新 <!-- <text class="tag cuIcon-fold"></text> -->
+				最新
+				<!-- <text class="tag cuIcon-fold"></text> -->
 			</view>
 			<view class="item" @click="sortPrice" :class="priceTOP ? 'text-blue' : 'text-black'">
-				价格 <!-- <text class="tag cuIcon-unfold"></text> -->
+				价格
+				<!-- <text class="tag cuIcon-unfold"></text> -->
 			</view>
 			<view class="item" @click="showModal">
 				筛选 <text class="tag cuIcon-filter"></text>
@@ -18,10 +20,10 @@
 				<view class="pro" v-for="(item, index) in list" :key="index" @click="showInfo" :data-logicid="item.logicId">
 					<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
 					<view class="name ellipsis text-black text-df">
-						{{item.patentName}}
+						{{item.trademarkName}}
 					</view>
 					<view class="des text-gray text-sm ellipsis">
-						{{item.industryNavigation}}
+						{{item.groupType}}
 					</view>
 					<view class="price text-orange">
 						<text class="text-lg text-price" v-if="item.price != 0">{{item.price}}</text>
@@ -36,7 +38,7 @@
 		<uni-drawer :visible="showScreen" mode="right" @close="hideModal">
 			<view class="screen-window">
 				<view class="group">
-					<view class="name text-df text-black">专利类型</view>
+					<view class="name text-df text-black">商标分类</view>
 					<view class="selection">
 						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterType" :class="typeCheck == index ? 'bg-green light' : ''"
 						 @click="handleQuery('type', index, item)" :key="index">
@@ -45,20 +47,11 @@
 					</view>
 				</view>
 				<view class="group">
-					<view class="name text-df text-black">所属行业</view>
+					<view class="name text-df text-black">组合类型</view>
 					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterTrade" :class="tradeCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('trade', index, item)" :key="index">
-							{{item.menuName}}
-						</view>
-					</view>
-				</view>
-				<view class="group">
-					<view class="name text-df text-black">专利状态</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterStatus" :class="statusCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('status', index, item)" :key="index">
-							{{item.selectName}}
+						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterComb" :class="combCheck == index ? 'bg-green light' : ''"
+						 @click="handleQuery('comb', index, item)" :key="index">
+							{{item.name}}
 						</view>
 					</view>
 				</view>
@@ -79,11 +72,17 @@
 				priceTOP: false,
 				showScreen: false,
 				filterType: [],
-				filterTrade: [],
-				filterStatus: [],
+				filterComb: [{
+					name: '中文'
+				}, {
+					name: '英文'
+				}, {
+					name: '图形'
+				}, {
+					name: '组合'
+				}],
 				typeCheck: -1,
-				tradeCheck: -1,
-				statusCheck: -1,
+				combCheck: -1,
 				list: [],
 				pageIndex: -1,
 				pageSize: 10,
@@ -107,17 +106,19 @@
 				if (!this.timeTOP) {
 					this.timeTOP = true;
 					this.priceTOP = false;
-					this.filter.pxSearch = 'CREATE_TIME';
+					this.filter.timeOrder = 'createTimeDesc';
+					this.filter.priceOrder = '';
 					this.getList('refresh')
 				}
 			},
 			sortPrice() {
-				 if (!this.priceTOP) {
-					 this.priceTOP = true;
-					 this.timeTOP = false;
-					 this.filter.pxSearch = 'PRICE';
-					 this.getList('refresh')
-				 }
+				if (!this.priceTOP) {
+					this.priceTOP = true;
+					this.timeTOP = false;
+					this.filter.priceOrder = 'priceEsc';
+					this.filter.timeOrder = '';
+					this.getList('refresh')
+				}
 			},
 			showModal() {
 				this.showScreen = true;
@@ -130,28 +131,19 @@
 					case 'type':
 						if (index == this.typeCheck) {
 							this.typeCheck = -1;
-							this.filter.patentTySearch = '';
+							this.filter.classifySearch = '';
 						} else {
 							this.typeCheck = index;
-							this.filter.patentTySearch = item.selectContent;
+							this.filter.classifySearch = item.selectContent;
 						}
 						break;
-					case 'trade':
-						if (index == this.tradeCheck) {
-							this.tradeCheck = -1;
-							this.filter.cydhSearch = '';
+					case 'comb':
+						if (index == this.combCheck) {
+							this.combCheck = -1;
+							this.filter.groupTypeSearch = '';
 						} else {
-							this.tradeCheck = index;
-							this.filter.cydhSearch = item.menuName;
-						}
-						break;
-					case 'status':
-						if (index == this.statusCheck) {
-							this.statusCheck = -1;
-							this.filter.patentStatusSearch = '';
-						} else {
-							this.statusCheck = index;
-							this.filter.patentStatusSearch = item.selectContent;
+							this.combCheck = index;
+							this.filter.groupTypeSearch = item.name;
 						}
 						break;
 				}
@@ -171,7 +163,7 @@
 				}
 				uni.request({
 					method: 'GET',
-					url: this.$servicePath + 'patent/mobile/patent.xhtml',
+					url: this.$servicePath + 'trademark/mobile/trademark.xhtml',
 					data: param,
 					success: res => {
 						const object = res.data.object;
@@ -180,13 +172,10 @@
 							uni.stopPullDownRefresh();
 						}
 						if (!this.filterType.length) {
-							this.filterType = object.patentTypeList;
+							this.filterType = object.classifyList;
 						}
-						if (!this.filterTrade.length) {
-							this.filterTrade = object.cydhList;
-						}
-						if (!this.filterStatus.length) {
-							this.filterStatus = object.patentStatusList;
+						if (!this.filterComb.length) {
+							this.filterComb = object.cydhList;
 						}
 						this.list.push.apply(this.list, object.presidents.results);
 						const count = object.presidents.count;
@@ -197,7 +186,7 @@
 			showInfo(e) {
 				const id = e.currentTarget.dataset.logicid;
 				uni.navigateTo({
-					url: 'patentinfo?logicid=' + id
+					url: 'tradeinfo?logicid=' + id
 				})
 			}
 		}
@@ -219,7 +208,7 @@
 		left: 0;
 		width: 100%;
 		z-index: 99;
-		
+
 		.item {
 			height: 80upx;
 			line-height: 80upx;

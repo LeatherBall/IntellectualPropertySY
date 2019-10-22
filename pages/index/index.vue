@@ -21,7 +21,7 @@
 				</view>
 				<swiper vertical="true" autoplay="true" circular="true" interval="3000" class="scroll-msg">
 					<swiper-item v-for="item in msgList" :key="item.logicId" @click="openUrl(item.ext6)">
-						<view class="home-msg text-sm">
+						<view class="home-msg text-df">
 							{{item.title}}
 						</view>
 					</swiper-item>
@@ -208,22 +208,22 @@
 						img: '../../static/icon/banquanshenbao.png',
 						name: '版权申报',
 						page: ''
-					},
-					{
-						img: '../../static/icon/zlzr.png',
-						name: '专利转让',
-						page: '../home/patent'
-					},
-					{
-						img: '../../static/icon/sbzr.png',
-						name: '商标转让',
-						page: ''
-					},
-					{
-						img: '../../static/icon/bqzr.png',
-						name: '版权转让',
-						page: ''
 					}
+					// {
+					// 	img: '../../static/icon/zlzr.png',
+					// 	name: '专利转让',
+					// 	page: '../home/patent'
+					// },
+					// {
+					// 	img: '../../static/icon/sbzr.png',
+					// 	name: '商标转让',
+					// 	page: '../home/trade'
+					// },
+					// {
+					// 	img: '../../static/icon/bqzr.png',
+					// 	name: '版权转让',
+					// 	page: '../home/copyright'
+					// }
 				],
 				msgList: [],
 				tb1Current: 0,
@@ -564,7 +564,6 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			line-height: 2;
 		}
 	}
 

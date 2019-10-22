@@ -90,6 +90,38 @@
 					}
 				}
 			}
+		}, {
+			"path": "pages/home/trade",
+			"style": {
+				"navigationBarTitleText": "商标转让",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/home/tradeinfo",
+			"style": {
+				"navigationBarTitleText": "商标转让详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
+		}, {
+			"path": "pages/home/copyright",
+			"style": {
+				"navigationBarTitleText": "版权转让",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/home/copyrightinfo",
+			"style": {
+				"navigationBarTitleText": "版权转让详情",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

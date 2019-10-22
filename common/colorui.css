@@ -636,7 +636,7 @@
 
 .bg-yellow.light {
 	color: #fbbd08;
-	background-color: #fef2ced2;
+	background-color: #fef2ce;
 }
 
 .bg-olive.light {
@@ -646,7 +646,7 @@
 
 .bg-green.light {
 	color: #39b54a;
-	background-color: #d7f0dbff;
+	background-color: #d7f0db;
 }
 
 .bg-cyan.light {
@@ -1045,6 +1045,12 @@
 .line-white,
 .lines-white {
 	color: #ffffff;
+}
+
+.text-black-light,
+.line-black-light,
+.lines-black-light {
+	color: #666666;
 }
 
 

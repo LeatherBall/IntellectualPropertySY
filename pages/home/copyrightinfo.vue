@@ -5,26 +5,23 @@
 		</view>
 		<view class="main-content">
 			<view class="title text-xl text-black text-bold">
-				{{obj.patentName}}
+				{{obj.copyrightname}}
 			</view>
 			<view class="price text-red">
 				<text class="text-xl text-bold text-price" v-if="obj.price != 0">{{obj.price}}</text>
 				<text class="text-xl text-bold" v-else>面议</text>
 			</view>
 			<view class="tag">
-				<text class="light bg-orange text-sm radius" v-if="!!obj.industryNavigation">{{obj.industryNavigation}}</text>
-				<text class="light bg-orange text-sm radius" v-if="!!obj.patentTypeStr">{{obj.patentTypeStr}}</text>
-				<text class="light bg-orange text-sm radius" v-if="!!obj.patentStatusStr">{{obj.patentStatusStr}}</text>
+				<text class="light bg-orange text-sm radius" v-if="!!obj.classifyStr">{{obj.classifyStr}}</text>
 			</view>
 			<view class="row-type">
-				<text class="text text-df">专利号：{{obj.patentNum}}</text>
-				<text class="text text-df">申请日期：{{obj.createTimeStr}}</text>
-				<text class="text text-df">有效期至：{{obj.validityTimeStr}}</text>
+				<text class="text text-df">授权范围：{{obj.authorizeRangeStr}}</text>
+				<text class="text text-df">授权期限：{{obj.authorizeYears}}年</text>
 			</view>
 		</view>
 		<view class="detail-content text-df bg-white">
 			<view class="title text-lg text-black text-bold">
-				专利详情
+				版权详情
 			</view>
 			<u-parse :content="obj.content"></u-parse>
 		</view>
@@ -41,7 +38,7 @@
 				</view>
 			</view>
 			<view class="row-type" v-if="!!user">
-				<text class="text text-df">专利权人：{{obj.patentee}}</text>
+				<text class="text text-df">著作权人：{{obj.owner}}</text>
 				<text class="text text-df">联系人：{{obj.contacts}}</text>
 				<text class="text text-df">联系电话：{{obj.mobileNum}}</text>
 				<text class="text text-df">邮箱：{{obj.emaile}}</text>
@@ -56,10 +53,10 @@
 				<view class="pro" v-for="(item, index) in naviObjs" :key="index" @click="showNaviObj" :data-logicid="item.logicId">
 					<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
 					<view class="name ellipsis text-black text-df">
-						{{item.patentName}}
+						{{item.copyrightname}}
 					</view>
 					<view class="des text-grey text-sm ellipsis">
-						{{item.industryNavigation}}
+						{{item.classifyStr}}
 					</view>
 					<view class="price text-orange">
 						<text class="text-lg text-price">{{item.price}}</text>
@@ -107,7 +104,7 @@
 			getInfo() {
 				uni.request({
 					method: 'GET',
-					url: this.$servicePath + 'patent/mobile/show.xhtml',
+					url: this.$servicePath + 'copyright/mobile/show.xhtml',
 					data: {
 						logicId: this.logicid
 					},
@@ -118,28 +115,39 @@
 						if (baseObj.createTimeStr.length > 10) {
 							baseObj.createTimeStr = baseObj.createTimeStr.substring(0, 10);
 						}
-						if (obj.patentStatusList && obj.patentStatusList.length) {
-							obj.patentStatusList.forEach(item => {
-								if (item.selectContent == baseObj.patentStatus) {
-									baseObj.patentStatusStr = item.selectName;
+						
+						const classifyList = obj.classifyList;
+						if (classifyList && classifyList.length) {
+							classifyList.forEach(item => {
+								if (item.selectContent == baseObj.classify) {
+									baseObj.classifyStr = item.selectName;
 									return false;
 								}
 							})
-						} else {
-							baseObj.patentStatusStr = '';
 						}
-						if (obj.patentTypeList && obj.patentTypeList.length) {
-							obj.patentTypeList.forEach(item => {
-								if (item.selectContent == baseObj.patentType) {
-									baseObj.patentTypeStr = item.selectName;
-									return false;
+						
+						const authorizeRangeList = obj.authorizeRangeList;
+						if (authorizeRangeList && authorizeRangeList.length) {
+							authorizeRangeList.forEach(item => {
+								if (item.selectContent == baseObj.authorizeRange) {
+									baseObj.authorizeRangeStr = item.selectName;
 								}
 							})
-						} else {
-							baseObj.patentTypeStr = '';
+						}
+						
+						const CopyrightObjs = obj.CopyrightObjs;
+						if (CopyrightObjs && CopyrightObjs.length) {
+							CopyrightObjs.forEach(item => {
+								classifyList.forEach(cla => {
+									if (cla.selectContent == item.classify) {
+										item.classifyStr = cla.selectName;
+										return false;
+									}
+								})
+							})
 						}
 
-						this.naviObjs = obj.naviObjs;
+						this.naviObjs = CopyrightObjs;
 						this.imgUrl = obj.fileUrl;
 						this.obj = baseObj;
 					}
@@ -148,7 +156,7 @@
 			showNaviObj(e) {
 				const id = e.currentTarget.dataset.logicid;
 				uni.navigateTo({
-					url: 'patentinfo?logicid=' + id
+					url: 'copyrightinfo?logicid=' + id
 				})
 			},
 			login() {

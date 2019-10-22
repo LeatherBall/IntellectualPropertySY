@@ -12,19 +12,31 @@
 				<text class="text-xl text-bold" v-else>面议</text>
 			</view>
 			<view class="tag">
-				<text class="light bg-orange text-sm radius" v-if="!!obj.industryNavigation">{{obj.industryNavigation}}</text>
-				<text class="light bg-orange text-sm radius" v-if="!!obj.patentTypeStr">{{obj.patentTypeStr}}</text>
-				<text class="light bg-orange text-sm radius" v-if="!!obj.patentStatusStr">{{obj.patentStatusStr}}</text>
+				<text class="light bg-orange text-sm radius" v-if="!!obj.classifyStr">{{obj.classifyStr}}</text>
+				<text class="light bg-orange text-sm radius" v-if="!!obj.groupType">{{obj.groupType}}</text>
 			</view>
 			<view class="row-type">
-				<text class="text text-df">专利号：{{obj.patentNum}}</text>
-				<text class="text text-df">申请日期：{{obj.createTimeStr}}</text>
-				<text class="text text-df">有效期至：{{obj.validityTimeStr}}</text>
+				<text class="text text-df">适用项目：{{obj.applicable}}</text>
+				<text class="text text-df">专用权期限：{{obj.useTermStr}}</text>
 			</view>
 		</view>
 		<view class="detail-content text-df bg-white">
 			<view class="title text-lg text-black text-bold">
-				专利详情
+				商标详情
+			</view>
+			<view class="row-type">
+				<text class="text text-df">初审公告期号：{{obj.firstNoticeNum}}</text>
+				<text class="text text-df">注册公告日期：{{obj.registerNoticeTimeStr}}</text>
+				<text class="text text-df">组合类型：{{obj.groupType}}</text>
+				<text class="text text-df">初审公告日期：{{obj.firstNoticeTimeStr}}</text>
+				<text class="text text-df">注册公告期号：{{obj.registerNoticeNum}}</text>
+				<text class="text text-df">有效期限：{{obj.useTermStr}}</text>
+				<text class="text text-df">所属区域：{{obj.region}}</text>
+				<text class="text text-df">是否共有商标：{{obj.isShare == 1 ? '是' : '否'}}</text>
+				<text class="text text-df">适用项目：{{obj.applicable}}</text>
+			</view>
+			<view class="text-df text-black-light">
+				商标释义：
 			</view>
 			<u-parse :content="obj.content"></u-parse>
 		</view>
@@ -41,7 +53,7 @@
 				</view>
 			</view>
 			<view class="row-type" v-if="!!user">
-				<text class="text text-df">专利权人：{{obj.patentee}}</text>
+				<text class="text text-df">商标申请人：{{obj.applyuser}}</text>
 				<text class="text text-df">联系人：{{obj.contacts}}</text>
 				<text class="text text-df">联系电话：{{obj.mobileNum}}</text>
 				<text class="text text-df">邮箱：{{obj.emaile}}</text>
@@ -56,10 +68,10 @@
 				<view class="pro" v-for="(item, index) in naviObjs" :key="index" @click="showNaviObj" :data-logicid="item.logicId">
 					<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
 					<view class="name ellipsis text-black text-df">
-						{{item.patentName}}
+						{{item.trademarkName}}
 					</view>
 					<view class="des text-grey text-sm ellipsis">
-						{{item.industryNavigation}}
+						{{item.groupType}}
 					</view>
 					<view class="price text-orange">
 						<text class="text-lg text-price">{{item.price}}</text>
@@ -107,7 +119,7 @@
 			getInfo() {
 				uni.request({
 					method: 'GET',
-					url: this.$servicePath + 'patent/mobile/show.xhtml',
+					url: this.$servicePath + 'trademark/mobile/show.xhtml',
 					data: {
 						logicId: this.logicid
 					},
@@ -118,15 +130,13 @@
 						if (baseObj.createTimeStr.length > 10) {
 							baseObj.createTimeStr = baseObj.createTimeStr.substring(0, 10);
 						}
-						if (obj.patentStatusList && obj.patentStatusList.length) {
-							obj.patentStatusList.forEach(item => {
-								if (item.selectContent == baseObj.patentStatus) {
-									baseObj.patentStatusStr = item.selectName;
+						if (obj.classifyList && obj.classifyList.length) {
+							obj.classifyList.forEach(item => {
+								if (item.selectContent == baseObj.classify) {
+									baseObj.classifyStr = item.selectName;
 									return false;
 								}
 							})
-						} else {
-							baseObj.patentStatusStr = '';
 						}
 						if (obj.patentTypeList && obj.patentTypeList.length) {
 							obj.patentTypeList.forEach(item => {
@@ -135,11 +145,9 @@
 									return false;
 								}
 							})
-						} else {
-							baseObj.patentTypeStr = '';
 						}
 
-						this.naviObjs = obj.naviObjs;
+						this.naviObjs = obj.TrademarkObjs;
 						this.imgUrl = obj.fileUrl;
 						this.obj = baseObj;
 					}
