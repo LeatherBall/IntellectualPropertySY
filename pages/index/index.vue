@@ -65,7 +65,7 @@
 			</view>
 			<view class="content home-bars" v-if="listState.patentLoad && listState.trademarkLoad && listState.copyrightLoad">
 				<view v-for="(tab, index) in bars2En" v-show="tb2Current === index" :key="index">
-					<view class="box horizontal" v-for="newsitem in tabBars2Data[tab]" :key="newsitem.logicId">
+					<view class="box horizontal" v-for="newsitem in tabBars2Data[tab]" :key="newsitem.logicId" @click="showTransItem(tab, newsitem.logicId)">
 						<view class="time">
 							<text class="day">{{newsitem.day}}</text>
 							<text class="year">{{newsitem.year}}</text>
@@ -78,7 +78,7 @@
 						</view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more" v-show="listState[tab + 'Count'] > 3">
+					<view class="loading-more" v-show="listState[tab + 'Count'] > 3" @click="showTransList(tab)">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
@@ -97,7 +97,7 @@
 			<view class="line-h"></view>
 
 			<view class="plate">
-				<view class="item" v-for="(plate, index) in plateList" :key="index">
+				<view class="item" v-for="(plate, index) in plateList" :key="index" @click="openUrl(plate.page)">
 					<image :src="plate.img" class="image"></image>
 					<view class="name">
 						<text>{{plate.name}}</text>
@@ -109,6 +109,7 @@
 		<view>
 			<yomol-upgrade :type="upgradeType" :url="upgradeUrl" :content="upgradeContent" ref="yomolUpgrade"></yomol-upgrade>
 		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -142,6 +143,7 @@
 		},
 		data() {
 			return {
+				// 用户是否已登录
 				isLogin: false,
 				homeBarCurrent: 0,
 				homeBardotsStyles: {
@@ -164,66 +166,51 @@
 						name: '新闻动态',
 						page: '../common/article/list?pageTitle=新闻动态&columnId=155540151100326'
 					},
-					{
-						img: '../../static/icon/shenbaozhinan.png',
-						name: '申报指南',
-						page: '../common/article/list?pageTitle=申报指南'
-					},
+					// {
+					// 	img: '../../static/icon/shenbaozhinan.png',
+					// 	name: '申报指南',
+					// 	page: ''
+					// },
 					{
 						img: '../../static/icon/zhuanlichaxun.png',
 						name: '专利查询',
-						page: ''
+						page: 'http://cpquery.cnipa.gov.cn/'
 					},
 					{
 						img: '../../static/icon/shangbiaochaxun.png',
 						name: '商标查询',
-						page: ''
+						page: 'http://wsjs.saic.gov.cn/?SVVVdE0o=KGmhcakkaZHkaZHka0ExbesZFAi6etCP27OgNPzHVc9qqWW'
 					},
 					{
 						img: '../../static/icon/banquanchaxun.png',
 						name: '版权查询',
-						page: ''
+						page: 'http://www.ccopyright.com.cn/'
 					},
 					{
 						img: '../../static/icon/zhengcefagui.png',
 						name: '政策法规',
-						page: '../common/article/list?pageTitle=政策法规'
+						page: '../common/article/list?pageTitle=政策法规&columnId=155539987892882'
 					},
-					{
-						img: '../../static/icon/peixunfuwu.png',
-						name: '培训服务',
-						page: ''
-					},
+					// {
+					// 	img: '../../static/icon/peixunfuwu.png',
+					// 	name: '培训服务',
+					// 	page: ''
+					// },
 					{
 						img: '../../static/icon/zhuanlishenbao.png',
 						name: '专利申报',
-						page: ''
+						page: 'http://cponline.sipo.gov.cn/'
 					},
 					{
 						img: '../../static/icon/shangbiaoshenbao.png',
 						name: '商标申报',
-						page: ''
+						page: 'http://wssq.saic.gov.cn:9080/tmsve/'
 					},
 					{
 						img: '../../static/icon/banquanshenbao.png',
-						name: '版权申报',
-						page: ''
+						name: '版权登记',
+						page: 'http://apply.ccopyright.com.cn/cpcc/column_list_bqdj.jsp'
 					}
-					// {
-					// 	img: '../../static/icon/zlzr.png',
-					// 	name: '专利转让',
-					// 	page: '../home/patent'
-					// },
-					// {
-					// 	img: '../../static/icon/sbzr.png',
-					// 	name: '商标转让',
-					// 	page: '../home/trade'
-					// },
-					// {
-					// 	img: '../../static/icon/bqzr.png',
-					// 	name: '版权转让',
-					// 	page: '../home/copyright'
-					// }
 				],
 				msgList: [],
 				tb1Current: 0,
@@ -239,31 +226,30 @@
 				plateList: [{
 						img: '../../static/zhuanlisq.jpg',
 						name: '在线专利申请',
-						page: ''
+						page: 'http://cponline.sipo.gov.cn/'
 					},
 					{
 						img: '../../static/shangbiaosq.jpg',
 						name: '在线商标申请',
-						page: ''
+						page: 'http://wssq.saic.gov.cn:9080/tmsve/'
 					},
 					{
 						img: '../../static/banquansq.jpg',
 						name: '在线版权申请',
-						page: ''
+						page: 'http://apply.ccopyright.com.cn/cpcc/column_list_bqdj.jsp'
 					},
 					{
 						img: '../../static/dilibiaozhisq.jpg',
 						name: '在线地理杂志申请',
-						page: ''
+						page: 'http://www.cgi.gov.cn/Home/Default/'
 					}
 				],
+				// APP检测更新相关
 				upgradeType: '',
 				upgradeContent: '',
 				upgradeUrl: ''
 			}
 		},
-		computed: {},
-		watch: {},
 		onLoad() {
 			// #ifdef APP-PLUS
 			checkAppVersion(false, (res) => {
@@ -360,7 +346,7 @@
 			},
 			// 获取装让信息列表
 			getTransferList(type) {
-				// 专利转让列表
+				// 专利转让列表 patent
 				uni.request({
 					method: 'GET',
 					url: this.$servicePath + 'patent/mobile/patent.xhtml',
@@ -378,12 +364,12 @@
 								itemData.day = date.substring(5, 10);
 							}
 						})
-						this.tabBars2Data[itemBar] = list;
+						this.tabBars2Data.patent = list;
 						this.listState.patentCount = res.data.object.presidents.count;
 						this.listState.patentLoad = true;
 					}
 				})
-				// 商标转让列表
+				// 版权转让列表 copyright
 				uni.request({
 					method: 'GET',
 					url: this.$servicePath + 'copyright/mobile/copyright.xhtml',
@@ -401,12 +387,12 @@
 								itemData.day = date.substring(5, 10);
 							}
 						})
-						this.tabBars2Data[itemBar] = list;
+						this.tabBars2Data.copyright = list;
 						this.listState.copyrightCount = res.data.object.presidents.count;
 						this.listState.copyrightLoad = true;
 					}
 				})
-				// 版权转让列表
+				// 商标转让列表 trademark
 				uni.request({
 					method: 'GET',
 					url: this.$servicePath + 'trademark/mobile/trademark.xhtml',
@@ -424,10 +410,10 @@
 								itemData.day = date.substring(5, 10);
 							}
 						})
-						this.tabBars2Data[itemBar] = list;
+						this.tabBars2Data.trademark = list;
 						this.listState.trademarkCount = res.data.object.presidents.count;
 						this.listState.trademarkLoad = true;
-						
+
 						if (type == 'refresh') {
 							uni.stopPullDownRefresh();
 						}
@@ -461,6 +447,32 @@
 			noticeMore() {
 				uni.navigateTo({
 					url: '../common/article/list?pageTitle=通知公告&columnId=155540151100315'
+				})
+			},
+			showTransItem(tab, id) {
+				let page;
+				if (tab == 'patent') {
+					page = '../home/patentinfo?logicid=' + id;
+				} else if (tab == 'trademark') {
+					page = '../home/tradeinfo?logicid=' + id;
+				} else {
+					page = '../home/copyrightinfo?logicid=' + id;
+				}
+				uni.navigateTo({
+					url: page
+				})
+			},
+			showTransList(tab) {
+				let page;
+				if (tab == 'patent') {
+					page = '../home/patent';
+				} else if (tab == 'trademark') {
+					page = '../home/trade';
+				} else {
+					page = '../home/copyright';
+				}
+				uni.navigateTo({
+					url: page
 				})
 			}
 		}

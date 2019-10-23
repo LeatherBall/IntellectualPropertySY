@@ -1,71 +1,76 @@
 <template>
 	<view>
-		<view class="head">
-			<image :src="imgUrl" mode="aspectFill" class="image" @click="previewImage(imgUrl)"></image>
-		</view>
-		<view class="main-content">
-			<view class="title text-xl text-black text-bold">
-				{{obj.copyrightname}}
+		<view v-if="loadingResult">
+			<view class="head">
+				<image :src="imgUrl" mode="aspectFill" class="image" @click="previewImage(imgUrl)"></image>
 			</view>
-			<view class="price text-red">
-				<text class="text-xl text-bold text-price" v-if="obj.price != 0">{{obj.price}}</text>
-				<text class="text-xl text-bold" v-else>面议</text>
-			</view>
-			<view class="tag">
-				<text class="light bg-orange text-sm radius" v-if="!!obj.classifyStr">{{obj.classifyStr}}</text>
-			</view>
-			<view class="row-type">
-				<text class="text text-df">授权范围：{{obj.authorizeRangeStr}}</text>
-				<text class="text text-df">授权期限：{{obj.authorizeYears}}年</text>
-			</view>
-		</view>
-		<view class="detail-content text-df bg-white">
-			<view class="title text-lg text-black text-bold">
-				版权详情
-			</view>
-			<u-parse :content="obj.content"></u-parse>
-		</view>
-		<view class="contact-content bg-white">
-			<view class="title text-lg text-black text-bold">
-				联系方式
-			</view>
-			<view v-if="!user">
-				<view class="text-df text-grey text-center login">
-					登录后可查看联系方式
+			<view class="main-content">
+				<view class="title text-xl text-black text-bold">
+					{{obj.copyrightname}}
 				</view>
-				<view class="text-center">
-					<button class="cu-btn round bg-green" @click="login">立即登录</button>
+				<view class="price text-red">
+					<text class="text-xl text-bold text-price" v-if="obj.price != 0">{{obj.price}}</text>
+					<text class="text-xl text-bold" v-else>面议</text>
+				</view>
+				<view class="tag">
+					<text class="light bg-orange text-sm radius" v-if="!!obj.classifyStr">{{obj.classifyStr}}</text>
+				</view>
+				<view class="row-type">
+					<text class="text text-df">授权范围：{{obj.authorizeRangeStr}}</text>
+					<text class="text text-df">授权期限：{{obj.authorizeYears}}年</text>
 				</view>
 			</view>
-			<view class="row-type" v-if="!!user">
-				<text class="text text-df">著作权人：{{obj.owner}}</text>
-				<text class="text text-df">联系人：{{obj.contacts}}</text>
-				<text class="text text-df">联系电话：{{obj.mobileNum}}</text>
-				<text class="text text-df">邮箱：{{obj.emaile}}</text>
-				<text class="text text-df">地址：{{obj.address}}</text>
+			<view class="detail-content text-df bg-white">
+				<view class="title text-lg text-black text-bold">
+					版权详情
+				</view>
+				<u-parse :content="obj.content"></u-parse>
 			</view>
-		</view>
-		<view class="rec-content">
-			<view class="title text-lg text-center">
-				<text class="text">专利相关推荐</text>
-			</view>
-			<view class="list" v-if="naviObjs && naviObjs.length">
-				<view class="pro" v-for="(item, index) in naviObjs" :key="index" @click="showNaviObj" :data-logicid="item.logicId">
-					<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
-					<view class="name ellipsis text-black text-df">
-						{{item.copyrightname}}
+			<view class="contact-content bg-white">
+				<view class="title text-lg text-black text-bold">
+					联系方式
+				</view>
+				<view v-if="!user">
+					<view class="text-df text-grey text-center login">
+						登录后可查看联系方式
 					</view>
-					<view class="des text-grey text-sm ellipsis">
-						{{item.classifyStr}}
-					</view>
-					<view class="price text-orange">
-						<text class="text-lg text-price">{{item.price}}</text>
+					<view class="text-center">
+						<button class="cu-btn round bg-green" @click="login">立即登录</button>
 					</view>
 				</view>
+				<view class="row-type" v-if="!!user">
+					<text class="text text-df">著作权人：{{obj.owner}}</text>
+					<text class="text text-df">联系人：{{obj.contacts}}</text>
+					<text class="text text-df">联系电话：{{obj.mobileNum}}</text>
+					<text class="text text-df">邮箱：{{obj.emaile}}</text>
+					<text class="text text-df">地址：{{obj.address}}</text>
+				</view>
 			</view>
-			<view class="text-df text-center text-gray" v-if="!naviObjs || !naviObjs.length">
-				暂无相关推荐
+			<view class="rec-content">
+				<view class="title text-lg text-center">
+					<text class="text">专利相关推荐</text>
+				</view>
+				<view class="list" v-if="naviObjs && naviObjs.length">
+					<view class="pro" v-for="(item, index) in naviObjs" :key="index" @click="showNaviObj" :data-logicid="item.logicId">
+						<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
+						<view class="name ellipsis text-black text-df">
+							{{item.copyrightname}}
+						</view>
+						<view class="des text-grey text-sm ellipsis">
+							{{item.classifyStr}}
+						</view>
+						<view class="price text-orange">
+							<text class="text-lg text-price">{{item.price}}</text>
+						</view>
+					</view>
+				</view>
+				<view class="text-df text-center text-gray" v-if="!naviObjs || !naviObjs.length">
+					暂无相关推荐
+				</view>
 			</view>
+		</view>
+		<view v-else class="text-df text-gray text-center hight-center">
+			{{loadingMsg}}
 		</view>
 	</view>
 </template>
@@ -85,7 +90,9 @@
 				logicid: '',
 				naviObjs: [], //同行业推荐列表
 				obj: {}, //详细信息
-				user: null
+				user: null,
+				loadingResult: true,
+				loadingMsg: ''
 			}
 		},
 		onLoad(param) {
@@ -109,13 +116,18 @@
 						logicId: this.logicid
 					},
 					success: (res) => {
+						if (!res.data.resultFlag) {
+							this.loadingResult = false;
+							this.loadingMsg = res.data.resultMsg;
+							return false;
+						}
 						const obj = res.data.object;
 						const baseObj = obj.obj;
 
 						if (baseObj.createTimeStr.length > 10) {
 							baseObj.createTimeStr = baseObj.createTimeStr.substring(0, 10);
 						}
-						
+
 						const classifyList = obj.classifyList;
 						if (classifyList && classifyList.length) {
 							classifyList.forEach(item => {
@@ -125,7 +137,7 @@
 								}
 							})
 						}
-						
+
 						const authorizeRangeList = obj.authorizeRangeList;
 						if (authorizeRangeList && authorizeRangeList.length) {
 							authorizeRangeList.forEach(item => {
@@ -134,7 +146,7 @@
 								}
 							})
 						}
-						
+
 						const CopyrightObjs = obj.CopyrightObjs;
 						if (CopyrightObjs && CopyrightObjs.length) {
 							CopyrightObjs.forEach(item => {
@@ -315,5 +327,10 @@
 				}
 			}
 		}
+	}
+
+	.hight-center {
+		height: 100vh;
+		line-height: 100vh;
 	}
 </style>
