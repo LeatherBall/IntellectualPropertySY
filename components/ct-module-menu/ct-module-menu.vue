@@ -73,9 +73,19 @@
 		},
 		methods: {
 			handleClick(page) {
-				uni.navigateTo({
-					url: page
-				});
+				if (page.includes('http://') || page.includes('https://')) {
+					// #ifdef APP-PLUS
+					plus.runtime.openWeb(page);
+					// #endif
+								
+					// #ifdef H5
+					window.open(page);
+					// #endif
+				} else {
+					uni.navigateTo({
+						url: page
+					});
+				}
 			},
 			change(e) {
 				this.current = e.detail.current;

@@ -3,10 +3,12 @@
 		<!-- 顶部筛选栏 -->
 		<view class="screen">
 			<view class="item" @click="sortTime" :class="timeTOP ? 'text-blue' : 'text-black'">
-				最新 <!-- <text class="tag cuIcon-fold"></text> -->
+				最新
+				<!-- <text class="tag cuIcon-fold"></text> -->
 			</view>
 			<view class="item" @click="sortPrice" :class="priceTOP ? 'text-blue' : 'text-black'">
-				价格 <!-- <text class="tag cuIcon-unfold"></text> -->
+				价格
+				<!-- <text class="tag cuIcon-unfold"></text> -->
 			</view>
 			<view class="item" @click="showModal">
 				筛选 <text class="tag cuIcon-filter"></text>
@@ -34,26 +36,28 @@
 		<uni-load-more :status="status" />
 		<!-- 筛选窗 -->
 		<uni-drawer :visible="showScreen" mode="right" @close="hideModal">
-			<view class="screen-window">
-				<view class="group">
-					<view class="name text-df text-black">版权类型</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in classifyList" :class="classifyCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('classify', index, item)" :key="index">
-							{{item.selectName}}
+			<scroll-view scroll-y="true" class="screen-window">
+				<view>
+					<view class="group">
+						<view class="name text-df text-black">版权类型</view>
+						<view class="selection">
+							<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in classifyList" :class="classifyCheck == index ? 'bg-green light' : ''"
+							 @click="handleQuery('classify', index, item)" :key="index">
+								{{item.selectName}}
+							</view>
+						</view>
+					</view>
+					<view class="group">
+						<view class="name text-df text-black">授权范围</view>
+						<view class="selection">
+							<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in authorizeRangeList" :class="authorizeRangeCheck == index ? 'bg-green light' : ''"
+							 @click="handleQuery('authorizeRange', index, item)" :key="index">
+								{{item.selectName}}
+							</view>
 						</view>
 					</view>
 				</view>
-				<view class="group">
-					<view class="name text-df text-black">授权范围</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in authorizeRangeList" :class="authorizeRangeCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('authorizeRange', index, item)" :key="index">
-							{{item.selectName}}
-						</view>
-					</view>
-				</view>
-			</view>
+			</scroll-view>
 		</uni-drawer>
 	</view>
 </template>
@@ -101,12 +105,12 @@
 				}
 			},
 			sortPrice() {
-				 if (!this.priceTOP) {
-					 this.priceTOP = true;
-					 this.timeTOP = false;
-					 this.filter.priceOrder	= 'priceEsc';
-					 this.getList('refresh')
-				 }
+				if (!this.priceTOP) {
+					this.priceTOP = true;
+					this.timeTOP = false;
+					this.filter.priceOrder = 'priceEsc';
+					this.getList('refresh')
+				}
 			},
 			showModal() {
 				this.showScreen = true;
@@ -207,10 +211,15 @@
 		display: flex;
 		justify-content: space-between;
 		position: fixed;
-		top: calc(var(--status-bar-height) + 44px);
+		/* #ifdef APP-PLUS */
+		top: 0;
+		/* #endif */
 		left: 0;
 		width: 100%;
 		z-index: 99;
+		/* #ifdef H5 */
+		top: 44px;
+		/* #endif */
 
 		.item {
 			height: 80upx;
@@ -229,10 +238,9 @@
 
 	.screen-window {
 		background: $bg-color-grey;
-		height: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
-		padding: 50upx 7upx 20upx 7upx;
+		height: 100vh;
+		padding: 0 7upx 20upx 7upx;
+		box-sizing: border-box;
 
 		.group {
 			margin-top: 40upx;

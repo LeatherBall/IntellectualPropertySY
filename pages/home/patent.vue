@@ -36,35 +36,37 @@
 		<uni-load-more :status="status" />
 		<!-- 筛选窗 -->
 		<uni-drawer :visible="showScreen" mode="right" @close="hideModal">
-			<view class="screen-window">
-				<view class="group">
-					<view class="name text-df text-black">专利类型</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterType" :class="typeCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('type', index, item)" :key="index">
-							{{item.selectName}}
+			<scroll-view scroll-y="true" class="screen-window">
+				<view>
+					<view class="group">
+						<view class="name text-df text-black">专利类型</view>
+						<view class="selection">
+							<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterType" :class="typeCheck == index ? 'bg-green light' : ''"
+							 @click="handleQuery('type', index, item)" :key="index">
+								{{item.selectName}}
+							</view>
+						</view>
+					</view>
+					<view class="group">
+						<view class="name text-df text-black">所属行业</view>
+						<view class="selection">
+							<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterTrade" :class="tradeCheck == index ? 'bg-green light' : ''"
+							 @click="handleQuery('trade', index, item)" :key="index">
+								{{item.menuName}}
+							</view>
+						</view>
+					</view>
+					<view class="group">
+						<view class="name text-df text-black">专利状态</view>
+						<view class="selection">
+							<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterStatus" :class="statusCheck == index ? 'bg-green light' : ''"
+							 @click="handleQuery('status', index, item)" :key="index">
+								{{item.selectName}}
+							</view>
 						</view>
 					</view>
 				</view>
-				<view class="group">
-					<view class="name text-df text-black">所属行业</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterTrade" :class="tradeCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('trade', index, item)" :key="index">
-							{{item.menuName}}
-						</view>
-					</view>
-				</view>
-				<view class="group">
-					<view class="name text-df text-black">专利状态</view>
-					<view class="selection">
-						<view class="opt bg-white ellipsis text-sm" v-for="(item, index) in filterStatus" :class="statusCheck == index ? 'bg-green light' : ''"
-						 @click="handleQuery('status', index, item)" :key="index">
-							{{item.selectName}}
-						</view>
-					</view>
-				</view>
-			</view>
+			</scroll-view>
 		</uni-drawer>
 	</view>
 </template>
@@ -224,10 +226,15 @@
 		display: flex;
 		justify-content: space-between;
 		position: fixed;
-		top: calc(var(--status-bar-height) + 44px);
+		/* #ifdef APP-PLUS */
+		top: 0;
+		/* #endif */
 		left: 0;
 		width: 100%;
 		z-index: 99;
+		/* #ifdef H5 */
+		top: 44px;
+		/* #endif */
 
 		.item {
 			height: 80upx;
@@ -246,10 +253,8 @@
 
 	.screen-window {
 		background: $bg-color-grey;
-		height: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
-		padding: 50upx 7upx 20upx 7upx;
+		height: 100vh;
+		padding: 0 7upx 20upx 7upx;
 
 		.group {
 			margin-top: 40upx;

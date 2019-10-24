@@ -1,6 +1,15 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
+		// 启动页
 		{
+			"path": "pages/index/start",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}, {
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
@@ -121,6 +130,19 @@
 					"titleNView": {
 						"type": "transparent"
 					}
+				}
+			}
+		}, {
+			"path": "pages/home/guide",
+			"style": {
+				"navigationBarTitleText": "申报指南"
+			}
+		}, {
+			"path": "pages/index/welcome",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": false
 				}
 			}
 		}

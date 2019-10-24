@@ -121,7 +121,7 @@
         methods: {
             logout() {
                 uni.showModal({
-                	title: 'tip',
+                	title: '',
                 	content: '确认退出账号吗？',
                 	confirmText: '确认退出',
                 	success: (res) => {
