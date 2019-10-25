@@ -2,8 +2,8 @@
 	<view>
 		<view class="pro-list">
 			<view class="pro" v-for="(item, index) in products" :key="index" @click="showInfo" :data-logicid="item.logicId">
-				<image :src="item.fileUrl" mode="widthFix" class="image"></image>
-				<view class="name ellipsis-two">
+				<image :src="item.fileUrl" mode="aspectFill" class="image"></image>
+				<view class="name ellipsis">
 					{{item.trainName}}
 				</view>
 				<view class="factory ellipsis">
@@ -114,7 +114,7 @@
 			border-radius: $radius-size-normal;
 			overflow: hidden;
 			margin-bottom: $space-size-huge;
-			height: 606rpx;
+			height: 554rpx;
 
 			.image {
 				display: block;
@@ -130,7 +130,7 @@
 				color: $font-color-base;
 				padding: $space-size-normal;
 				line-height: 1.5;
-				height: 104rpx;
+				height: 52rpx;
 			}
 
 			.factory {
