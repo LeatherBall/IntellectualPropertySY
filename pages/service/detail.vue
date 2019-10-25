@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view :style="{display:show}">
 		<view class="banner" v-if="res.isType!='other'">
 			<video v-if="res.isType=='video'" class="image" id="myVideo" :src="res.mp4video" @error="videoErrorCallback"
 			 controls></video>
@@ -56,7 +56,8 @@
 			return {
 				htmlNodes: '',
 				obj: {},
-				res: {}
+				res: {},
+				show:'none'
 			}
 		},
 		onLoad(e) {
@@ -72,6 +73,9 @@
 			navigate(href, e) {
 				// do something
 				console.log(href)
+				uni.showLoading({
+				    title: '下载中'
+				});
 				uni.downloadFile({
 					url: href, //仅为示例，并非真实的资源
 					success: (res) => {
@@ -82,6 +86,7 @@
 								position: 'bottom',
 								title: '下载成功'
 							});
+							uni.hideLoading();
 							var filePath = res.tempFilePath;
 							uni.openDocument({
 								filePath: filePath,
@@ -96,6 +101,9 @@
 			downloadFile() {
 				// do something
 				console.log(this.res.otherURL)
+				uni.showLoading({
+				    title: '下载中'
+				});
 				uni.downloadFile({
 					url: this.res.otherURL, //仅为示例，并非真实的资源
 					success: (res) => {
@@ -106,6 +114,7 @@
 								position: 'bottom',
 								title: '下载成功'
 							});
+							uni.hideLoading();
 							var filePath = res.tempFilePath;
 							uni.openDocument({
 								filePath: filePath,
@@ -150,6 +159,7 @@
 					success: (data) => {
 						var res = data.data;
 						this.res = res.object;
+						this.show = 'block';
 						if(this.res.isType=='other'){
 							var name = this.res.otherURL.substr(this.res.otherURL.lastIndexOf('/'));
 							this.res.str = name.substring(1);//截取文件名称字符串
