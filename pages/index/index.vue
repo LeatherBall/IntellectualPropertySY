@@ -296,20 +296,19 @@
 			},
 			checkUserInfo() {
 				UserBase.getUser(this.$servicePath, user => {
-					let showname = !!user ? user.userName : '登录';
-					if (showname.length > 3) {
-						showname = showname.substring(0, 2) + '..';
-					}
 					// #ifdef APP-PLUS
+					const style = !!user ? {
+						text: '个人'
+					} : {
+						text: '登录'
+					}
 					const webView = this.$mp.page.$getAppWebview();
-					webView.setTitleNViewButtonStyle(0, {
-						text: showname,
-					});
+					webView.setTitleNViewButtonStyle(0, style);
 					// #endif
 
 					// #ifdef H5
 					const dom = document.querySelectorAll(".uni-btn-icon")[1];
-					dom.innerText = showname;
+					dom.innerHTML = !!user ? '<i class="uni-icon uni-icon-contact"></i>' : '登录';
 					// #endif
 					this.isLogin = !!user;
 				});
@@ -433,6 +432,8 @@
 			openUrl(url) {
 				// #ifdef APP-PLUS
 				plus.runtime.openWeb(url);
+				// 外部应用打开
+				// plus.runtime.openURL(url)
 				// #endif
 
 				// #ifdef H5

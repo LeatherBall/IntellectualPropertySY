@@ -7,6 +7,11 @@
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
+        "safearea" : {
+            "bottom" : {
+                "offset" : "none"
+            }
+        },
         "usingComponents" : true,
         "splashscreen" : {
             "alwaysShowBeforeRender" : false,
@@ -86,6 +91,13 @@
                         "spotlight@2x" : "unpackage/res/icons/80x80.png",
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
+                }
+            },
+            "splashscreen" : {
+                "android" : {
+                    "hdpi" : "static/image/480-762.png",
+                    "xhdpi" : "static/image/720-1242.png",
+                    "xxhdpi" : "static/image/1080-1882.png"
                 }
             }
         }

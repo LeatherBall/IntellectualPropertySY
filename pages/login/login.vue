@@ -1,5 +1,10 @@
 <template>
 	<view class="login">
+		<view class="head">
+			<view class="left" @click="goBack">
+				<uni-icons type="arrowleft" :size="27"></uni-icons>
+			</view>
+		</view>
 		<view class="content">
 			<!-- 头部logo -->
 			<view class="header">
@@ -10,7 +15,7 @@
 				<wInput v-model="username" type="text" maxlength="11" placeholder="用户名"></wInput>
 				<wInput v-model="password" type="password" maxlength="11" placeholder="密码"></wInput>
 			</view>
-			<wButton text="登 录" :rotate="isRotate" @click.native="startLogin()"></wButton>
+			<wButton bgColor="linear-gradient(to right, rgb(47, 197, 161), rgb(14, 169, 131))" text="登 录" :rotate="isRotate" @click.native="startLogin()"></wButton>
 
 			<!-- 底部信息 -->
 			<!-- 			<view class="footer">
@@ -107,12 +112,30 @@
 						this.isRotate = false;
 					}
 				})
+			},
+			goBack() {
+				uni.navigateBack();
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.head {
+		position: relative;
+		height: calc(44px + var(--status-bar-height));
+
+		.left {
+			position: absolute;
+			top: var(--status-bar-height);
+			left: 0;
+			width: 44px;
+			height: 44px;
+			line-height: 44px;
+			text-align: center;
+		}
+	}
+
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -136,7 +159,6 @@
 	.header image {
 		width: 161upx;
 		height: 161upx;
-		border-radius: 50%;
 	}
 
 	/* 主体 */

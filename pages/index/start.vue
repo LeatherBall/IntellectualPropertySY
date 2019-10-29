@@ -14,7 +14,8 @@
 			// 首次打开APP时展示引导页
 			loadExecution() {
 				try {
-					const value = uni.getStorageSync('launchFlag');
+					// const value = uni.getStorageSync('launchFlag');
+					const value = true;
 					if (value) {
 						uni.switchTab({
 							url: '/pages/index/index'

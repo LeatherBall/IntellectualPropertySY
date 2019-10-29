@@ -73,11 +73,7 @@
 		}, {
 			"path": "pages/login/login",
 			"style": {
-				"app-plus": {
-					"titleNView": {
-						"type": "transparent"
-					}
-				}
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/mine/userinfo",

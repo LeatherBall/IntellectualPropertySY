@@ -161,7 +161,7 @@
 </script>
 
 <style>
-	@import url("./css/icon.css");
+	/* @import url("./css/icon.css"); */
 	
 	.main-list{
 		display: flex;

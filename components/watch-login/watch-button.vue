@@ -22,8 +22,7 @@
 			bgColor:{
 				//按钮背景颜色
 				type: String,
-				// default: "linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.6))",
-				default: "linear-gradient(to right, rgba(18, 134, 106, 0.9), rgba(18, 134, 106, 1))",
+				default: "linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.6))",
 			},
 			fontColor:{
 				//按钮字体颜色
@@ -41,7 +40,7 @@
 </script>
 
 <style>
-	@import url("./css/icon.css");
+	/* @import url("./css/icon.css"); */
 	
 	.dlbutton {
 		color: #FFFFFF;
@@ -84,6 +83,10 @@
 	    -ms-transition: all 0.4s cubic-bezier(.57,.19,.51,.95);
 	    -o-transition: all 0.4s cubic-bezier(.57,.19,.51,.95);
 	    transition: all 0.4s cubic-bezier(.57,.19,.51,.95);
+	}
+	
+	.buttonBorder:after {
+		border: none;
 	}
 	
 	/* 旋转动画 */

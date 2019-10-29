@@ -33,8 +33,8 @@
 			<view class="add" opt="file">
 				<view class="base-data-file" @tap="downloadFile">
 					<img :src="res.image">
-					<p class="title" style="height: auto">{{res.str}}</p>
-					<p><i class="iconfont icon-ziliaoiconx"></i>点击下载</p>
+					<view class="title highlight text-df" style="height: auto">{{res.str}}</view>
+					<view class="down highlight text-df">点击下载</view>
 				</view>
 			</view>
 		</view>
@@ -72,7 +72,6 @@
 			},
 			navigate(href, e) {
 				// do something
-				console.log(href)
 				uni.showLoading({
 				    title: '下载中'
 				});
@@ -80,7 +79,6 @@
 					url: href, //仅为示例，并非真实的资源
 					success: (res) => {
 						if (res.statusCode === 200) {
-							console.log('下载成功');
 							uni.showToast({
 								icon: 'success',
 								position: 'bottom',
@@ -95,12 +93,19 @@
 								}
 							});
 						}
+					},
+					fail: () => {
+						uni.showToast({
+							icon: 'none',
+							position: 'bottom',
+							title: '下载失败'
+						});
+						uni.hideLoading();
 					}
 				});
 			},
 			downloadFile() {
 				// do something
-				console.log(this.res.otherURL)
 				uni.showLoading({
 				    title: '下载中'
 				});
@@ -108,7 +113,6 @@
 					url: this.res.otherURL, //仅为示例，并非真实的资源
 					success: (res) => {
 						if (res.statusCode === 200) {
-							console.log('下载成功');
 							uni.showToast({
 								icon: 'success',
 								position: 'bottom',
@@ -123,6 +127,14 @@
 								}
 							});
 						}
+					},
+					fail: () => {
+						uni.showToast({
+							icon: 'none',
+							position: 'bottom',
+							title: '下载失败'
+						});
+						uni.hideLoading();
 					}
 				});
 			},
@@ -134,7 +146,6 @@
 					},
 					success: (data) => {
 						var res = data.data;
-						console.log(res);
 						this.obj = res.object.obj;
 						var sinSelList = res.object.sinSelList
 						this.obj.createTimeStr = this.obj.createTimeStr.substring(0, 10)
@@ -188,12 +199,6 @@
 		box-sizing: border-box;
 	}
 
-	.file p {
-		font-size: 32rpx;
-		margin-bottom: 10rpx;
-		// font-weight: bold;
-	}
-
 	.base-data-file {
 		width: calc(100% - 80rpx);
 		min-height: 64rpx;
@@ -226,25 +231,15 @@
 		object-fit: cover;
 	}
 
-	.base-data-file p {
-		height: 26rpx;
-		line-height: 26rpx;
-		font-size: 28rpx;
-		color: #7d7d7d;
-	}
-
-	.base-data-file p i {
-		margin-right: 6rpx;
-	}
-
 	.base-data-file .title {
 		height: auto;
 		line-height: 32rpx;
 		margin-bottom: 6rpx;
 		text-align: justify;
-		font-size: var(--fonts-c) !important;
-		/*color: var(--color-o);*/
-		padding: unset !important;
+	}
+	
+	.base-data-file .down {
+		line-height: 1;
 	}
 
 	.banner {
@@ -327,5 +322,10 @@
 		left: 0;
 		width: 100%;
 		background: $bg-color-under;
+	}
+	
+	.highlight {
+		color: #0081ff;
+		text-decoration: underline;
 	}
 </style>

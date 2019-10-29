@@ -1,12 +1,12 @@
 <template>
-	<div>
+	<view>
 		<view class="welcome">
 			<view class="pass cu-tag line-black round" @click="pass">
 				跳过<text>{{time}}</text>
 			</view>
 			<image src="../../static/welcome.jpg" mode="widthFix" class="image"></image>
 		</view>
-	</div>
+	</view>
 </template>
 
 <script>
