@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="article bg-white" v-for="article in list" :key="article.id" @click="showInfo(article.ext6)">
+		<view class="article bg-white" v-for="article in list" :key="article.id" @click="showInfo(article.ext6,article.logicId)">
 			<view class="title ellipsis-two text-lg text-black">{{article.title}}</view>
 			<view class="time text-sm"><text class="iconfont clock text-sm">&#xe604;</text>{{article.createTimeStr}}</view>
 		</view>
@@ -70,14 +70,22 @@
 					this.status = 'error';
 				})
 			},
-			showInfo(url) {
-				// #ifdef APP-PLUS
-				plus.runtime.openWeb(url);
-				// #endif
-				
-				// #ifdef H5
-				window.open(url);
-				// #endif
+			showInfo(url, logicId) {
+				if (url) {
+					// #ifdef APP-PLUS
+					plus.runtime.openWeb(url);
+					// 外部应用打开
+					// plus.runtime.openURL(url)
+					// #endif
+
+					// #ifdef H5
+					window.open(url);
+					// #endif
+				} else {
+					uni.navigateTo({
+						url: '../../articleDetail/articleDetail?logicId=' + logicId
+					})
+				}
 			}
 		}
 	}
@@ -87,22 +95,24 @@
 	page {
 		background: $bg-color-under;
 	}
+
 	.article {
 		padding: $space-size-large;
-		
+
 		.title {
 			line-height: 1.5;
 		}
-		
+
 		.time {
 			margin-top: $space-size-small;
+
 			.clock {
 				margin-right: $space-size-normal;
 			}
 		}
 	}
-	
-	.article + .article {
+
+	.article+.article {
 		border-top: $border-style-basic;
 	}
 </style>

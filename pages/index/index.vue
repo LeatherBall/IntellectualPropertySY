@@ -1,13 +1,14 @@
 <template>
 	<view class="page">
 		<view class="home-banner">
-			<uni-swiper-dot :info="hannerList" :current="homeBarCurrent" :dotsStyles="homeBardotsStyles" mode="long" field="content">
+			<image src="../../static/bn2.jpg" mode="aspectFill" class="banner-image"></image>
+			<!-- <uni-swiper-dot :info="hannerList" :current="homeBarCurrent" :dotsStyles="homeBardotsStyles" mode="long" field="content">
 				<swiper :autoplay="true" :circular="true" class="swiper-box" @change="homeBarChange">
 					<swiper-item class="wrapper" v-for="(banner, index) in hannerList" :key="index">
 						<image :src="banner.img" mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
-			</uni-swiper-dot>
+			</uni-swiper-dot> -->
 		</view>
 
 		<view class="main-wrapper">
@@ -20,7 +21,7 @@
 					<text>通知公告</text>
 				</view>
 				<swiper vertical="true" autoplay="true" circular="true" interval="3000" class="scroll-msg">
-					<swiper-item v-for="item in msgList" :key="item.logicId" @click="openUrl(item.ext6)">
+					<swiper-item v-for="item in msgList" :key="item.logicId" @click="openUrl(item.ext6,item.logicId)">
 						<view class="home-msg text-df">
 							{{item.title}}
 						</view>
@@ -36,7 +37,7 @@
 			</view>
 			<view class="content home-bars" v-if="listState.newsLoad">
 				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
-					<view class="box vertical" v-for="newsitem in tabBars1Data" :key="newsitem.logicId" @click="openUrl(newsitem.ext6)">
+					<view class="box vertical" v-for="newsitem in tabBars1Data" :key="newsitem.logicId" @click="openUrl(newsitem.ext6,newsitem.logicId)">
 						<view class="title"><text>{{newsitem.title}}</text></view>
 						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.createTimeStr}}</text></view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
@@ -97,7 +98,7 @@
 			<view class="line-h"></view>
 
 			<view class="plate">
-				<view class="item" v-for="(plate, index) in plateList" :key="index" @click="openUrl(plate.page)">
+				<view class="item" v-for="(plate, index) in plateList" :key="index" @click="openUrl(plate.page,'')">
 					<image :src="plate.img" class="image"></image>
 					<view class="name">
 						<text>{{plate.name}}</text>
@@ -429,16 +430,22 @@
 					}
 				})
 			},
-			openUrl(url) {
-				// #ifdef APP-PLUS
-				plus.runtime.openWeb(url);
-				// 外部应用打开
-				// plus.runtime.openURL(url)
-				// #endif
+			openUrl(url, logicId) {
+				if (url) {
+					// #ifdef APP-PLUS
+					plus.runtime.openWeb(url);
+					// 外部应用打开
+					// plus.runtime.openURL(url)
+					// #endif
 
-				// #ifdef H5
-				window.open(url);
-				// #endif
+					// #ifdef H5
+					window.open(url);
+					// #endif
+				} else {
+					uni.navigateTo({
+						url: '../articleDetail/articleDetail?logicId=' + logicId
+					})
+				}
 			},
 			newsMore() {
 				uni.navigateTo({
@@ -515,6 +522,11 @@
 		z-index: 1;
 	}
 
+	.banner-image {
+		width: 100%;
+		height: 300rpx;
+	}
+
 	.home-banner .wrapper,
 	.home-banner .wrapper image {
 		width: 100%;
@@ -553,7 +565,7 @@
 
 		.scroll-msg {
 			margin: 0 $space-size-large;
-
+			margin-left: 36rpx;
 			.home-msg {
 				white-space: nowrap;
 			}
