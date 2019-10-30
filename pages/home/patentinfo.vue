@@ -94,8 +94,8 @@
 				naviObjs: [], //同行业推荐列表
 				obj: {}, //详细信息
 				user: null,
-				loadingResult: true,
-				loadingMsg: ''
+				loadingResult: false,
+				loadingMsg: '加载中...'
 			}
 		},
 		onLoad(param) {
@@ -154,6 +154,7 @@
 						this.naviObjs = obj.naviObjs;
 						this.imgUrl = obj.fileUrl;
 						this.obj = baseObj;
+						this.loadingResult = true;
 					}
 				})
 			},

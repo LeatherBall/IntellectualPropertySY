@@ -12,7 +12,8 @@
 		}, {
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
+				// "navigationBarTitleText": "沈阳自贸试验区知识产权公共服务平台",
+				"navigationBarTitleText": "自贸知识产权公共服务平台",
 				"app-plus": {
 					"titleNView": {
 						// "type": "transparent",
@@ -63,12 +64,7 @@
 		}, {
 			"path": "pages/common/article/detail",
 			"style": {
-				"navigationBarTitleText": "文章详情",
-				"app-plus": {
-					"titleNView": {
-						"type": "transparent"
-					}
-				}
+				"navigationBarTitleText": "文章详情"
 			}
 		}, {
 			"path": "pages/login/login",
@@ -142,13 +138,7 @@
 				}
 			}
 		}
-	    ,{
-            "path" : "pages/articleDetail/articleDetail",
-            "style" : {
-				"navigationBarTitleText": "文章详情"
-			}
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "",

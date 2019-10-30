@@ -35,20 +35,20 @@
 				<uni-segmented-control :current="tb1Current" :values="bars1" style-type="text" active-color="#12866a" @clickItem="clickTB1Item"
 				 text-align="left" />
 			</view>
-			<view class="content home-bars" v-if="listState.newsLoad">
+			<view class="content home-bars" v-if="newsLoad">
 				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
 					<view class="box vertical" v-for="newsitem in tabBars1Data" :key="newsitem.logicId" @click="openUrl(newsitem.ext6,newsitem.logicId)">
 						<view class="title"><text>{{newsitem.title}}</text></view>
 						<view class="time"><text class="iconfont clock">&#xe604;</text><text class="text">{{newsitem.createTimeStr}}</text></view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more" v-show="listState.newsCount > 3" @click="newsMore">
+					<view class="loading-more" v-show="newsCount > 3" @click="newsMore">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
 			</view>
 			<!-- 新闻动态站位骨架 -->
-			<view class="content home-bars stance-news" v-if="!listState.newsLoad">
+			<view class="content home-bars stance-news" v-if="!newsLoad">
 				<view v-for="(tab, index) in bars1" v-show="tb1Current === index" :key="index">
 					<view class="stance vertical" v-for="index in 3" :key="index">
 						<view class="title"></view>
@@ -64,7 +64,7 @@
 				<uni-segmented-control :current="tb2Current" :values="bars2" style-type="text" active-color="#12866a" @clickItem="clickTB2Item"
 				 text-align="left" />
 			</view>
-			<view class="content home-bars" v-if="listState.patentLoad && listState.trademarkLoad && listState.copyrightLoad">
+			<view class="content home-bars" v-if="patentLoad && trademarkLoad && copyrightLoad">
 				<view v-for="(tab, index) in bars2En" v-show="tb2Current === index" :key="index">
 					<view class="box horizontal" v-for="newsitem in tabBars2Data[tab]" :key="newsitem.logicId" @click="showTransItem(tab, newsitem.logicId)">
 						<view class="time">
@@ -79,13 +79,13 @@
 						</view>
 						<uni-icons type="arrowright" class="tip" color="#999999" size="20"></uni-icons>
 					</view>
-					<view class="loading-more" v-show="listState[tab + 'Count'] > 3" @click="showTransList(tab)">
+					<view class="loading-more" v-show="listCount[tab + 'Count'] > 3" @click="showTransList(tab)">
 						<text class="loading-more-text">更多</text>
 					</view>
 				</view>
 			</view>
 			<!-- 专利、商标、版权转让 站位骨架-->
-			<view class="content home-bars stance-news" v-if="!listState.patentLoad || !listState.trademarkLoad || !listState.copyrightLoad">
+			<view class="content home-bars stance-news" v-if="!patentLoad || !trademarkLoad || !copyrightLoad">
 				<view v-for="index in 3" class="stance horizontal" :key="index">
 					<view class="time"></view>
 					<view class="text">
@@ -222,8 +222,16 @@
 				bars2En: ['patent', 'trademark', 'copyright'],
 				bars2Flag: false,
 				tabBars2Data: {},
-				// 首页新闻动态、专利转让、商标转让、版权转让列表中的文章数量以及加载状态（数量超过3时显示更多）
-				listState: {},
+				// 首页专利转让、商标转让、版权转让列表中的文章数量（数量超过3时显示更多）
+				listCount: {
+					patentCount: 0,
+					trademarkCount: 0,
+					copyrightCount: 0
+				},
+				newsLoad: false,
+				patentLoad: false,
+				trademarkLoad: false,
+				copyrightLoad: false,
 				plateList: [{
 						img: '../../static/zhuanlisq.jpg',
 						name: '在线专利申请',
@@ -299,7 +307,7 @@
 				UserBase.getUser(this.$servicePath, user => {
 					// #ifdef APP-PLUS
 					const style = !!user ? {
-						text: '个人'
+						text: '账户'
 					} : {
 						text: '登录'
 					}
@@ -339,8 +347,8 @@
 							item.createTimeStr = item.createTimeStr ? item.createTimeStr.replace(/\//g, '-') : '- -';
 						})
 						this.tabBars1Data = list;
-						this.listState.newsCount = res.object.presidents.count;
-						this.listState.newsLoad = true;
+						this.newsCount = res.object.presidents.count;
+						this.newsLoad = true;
 					}
 				})
 			},
@@ -365,8 +373,8 @@
 							}
 						})
 						this.tabBars2Data.patent = list;
-						this.listState.patentCount = res.data.object.presidents.count;
-						this.listState.patentLoad = true;
+						this.listCount.patentCount = res.data.object.presidents.count;
+						this.patentLoad = true;
 					}
 				})
 				// 版权转让列表 copyright
@@ -388,8 +396,8 @@
 							}
 						})
 						this.tabBars2Data.copyright = list;
-						this.listState.copyrightCount = res.data.object.presidents.count;
-						this.listState.copyrightLoad = true;
+						this.listCount.copyrightCount = res.data.object.presidents.count;
+						this.copyrightLoad = true;
 					}
 				})
 				// 商标转让列表 trademark
@@ -411,8 +419,8 @@
 							}
 						})
 						this.tabBars2Data.trademark = list;
-						this.listState.trademarkCount = res.data.object.presidents.count;
-						this.listState.trademarkLoad = true;
+						this.listCount.trademarkCount = res.data.object.presidents.count;
+						this.trademarkLoad = true;
 
 						if (type == 'refresh') {
 							uni.stopPullDownRefresh();
@@ -443,7 +451,7 @@
 					// #endif
 				} else {
 					uni.navigateTo({
-						url: '../articleDetail/articleDetail?logicId=' + logicId
+						url: '../common/article/detail?logicId=' + logicId
 					})
 				}
 			},
@@ -564,8 +572,8 @@
 		box-sizing: border-box;
 
 		.scroll-msg {
-			margin: 0 $space-size-large;
-			margin-left: 36rpx;
+			margin: 0 20rpx;
+
 			.home-msg {
 				white-space: nowrap;
 			}
@@ -580,6 +588,7 @@
 			text-align: center;
 			font-size: $font-size-normal;
 			white-space: nowrap;
+			margin-right: 16upx;
 		}
 
 		.more {
@@ -587,6 +596,7 @@
 			color: $font-color-base;
 			padding-left: $space-size-huge;
 			position: relative;
+			margin-left: 6upx;
 
 			&::before {
 				position: absolute;

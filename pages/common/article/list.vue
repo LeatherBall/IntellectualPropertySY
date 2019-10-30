@@ -83,7 +83,7 @@
 					// #endif
 				} else {
 					uni.navigateTo({
-						url: '../../articleDetail/articleDetail?logicId=' + logicId
+						url: 'detail?logicId=' + logicId
 					})
 				}
 			}
